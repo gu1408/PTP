@@ -4,15 +4,14 @@ import {
   Building2,
   MapPin,
   Clock,
-  Sparkles,
   AlertTriangle,
-  Flame,
   CheckCircle2,
   Languages,
   UserCheck,
   Send,
   CopyCheck,
-  FileText
+  FileText,
+  Info
 } from 'lucide-react';
 
 export default function TicketDetailModal({
@@ -108,15 +107,15 @@ export default function TicketDetailModal({
   if (!ticketId) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl shadow-2xl overflow-hidden my-8 max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-[2px] flex items-center justify-center p-4">
+      <div className="bg-white border border-gray-200 rounded-fluent-lg w-full max-w-4xl shadow-fluent-16 overflow-hidden my-8 max-h-[90vh] flex flex-col">
         
-        {/* Header */}
-        <div className="p-5 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between">
+        {/* Fluent 2 Dialog Header */}
+        <div className="p-4 px-6 border-b border-gray-200 bg-white flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <span className="text-xl font-mono font-extrabold text-white">{ticketId}</span>
+            <span className="text-xl font-mono font-bold text-gray-900">{ticketId}</span>
             {ticket && (
-              <span className="text-xs px-2.5 py-0.5 font-bold rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/30">
+              <span className="text-xs px-2.5 py-0.5 font-semibold rounded bg-gray-100 text-gray-700 border border-gray-200">
                 {ticket.complaintId}
               </span>
             )}
@@ -124,115 +123,114 @@ export default function TicketDetailModal({
               <button
                 type="button"
                 onClick={() => onViewDuplicateGroup && onViewDuplicateGroup(ticket.duplicateGroupId)}
-                className="text-xs px-2.5 py-0.5 font-bold rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 transition-colors flex items-center space-x-1"
+                className="text-xs px-2.5 py-0.5 font-semibold rounded bg-[#fff4ce] text-[#8a6100] border border-[#feec9e] hover:bg-[#ffeb99] transition-colors flex items-center space-x-1"
               >
                 <CopyCheck className="w-3.5 h-3.5" />
-                <span>Duplicate Incident Grouped</span>
+                <span>Related Cluster</span>
               </button>
             )}
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
+            className="p-1.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+            title="Close Dialog"
+            aria-label="Close Dialog"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1">
+        <div className="p-6 overflow-y-auto space-y-6 flex-1 bg-[#fafafa]">
           {loading ? (
             <div className="py-20 text-center">
-              <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-              <p className="text-xs text-slate-400">Loading comprehensive ticket details...</p>
+              <div className="w-8 h-8 border-2 border-[#0078d4] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+              <p className="text-xs text-gray-500">Loading ticket records...</p>
             </div>
           ) : error ? (
-            <div className="p-4 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl text-sm">
+            <div className="p-4 bg-[#fde7e9] border border-[#f8b8bc] text-[#c42b1c] rounded-fluent-md text-sm">
               {error}
             </div>
           ) : ticket ? (
             <>
-              {/* Top Banner: AI Severity Assessment */}
-              <div className="bg-slate-950 p-5 rounded-xl border border-slate-800 space-y-3">
+              {/* Top Banner: Triage Assessment */}
+              <div className="bg-white p-4 rounded-fluent-md border border-gray-200 shadow-fluent-2 space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center space-x-2">
-                    <Sparkles className="w-5 h-5 text-blue-400" />
-                    <span className="text-sm font-bold text-white">AI Severity & Triage Assessment</span>
+                    <Info className="w-4 h-4 text-[#0078d4]" />
+                    <span className="text-sm font-bold text-gray-900">Triage Classification Summary</span>
                   </div>
                   <div className="flex items-center space-x-3 text-xs">
-                    <span className="text-slate-400">AI Confidence: <strong className="text-emerald-400">{Math.round((ticket.aiConfidence || 0.95) * 100)}%</strong></span>
-                    <span className="text-slate-400">Intelligent Risk Score: <strong className="text-blue-400 font-mono text-sm">{ticket.priorityScore}/100</strong></span>
+                    <span className="text-gray-500">AI Confidence: <strong className="text-[#107c41]">{Math.round((ticket.aiConfidence || 0.95) * 100)}%</strong></span>
+                    <span className="text-gray-500">Risk Score: <strong className="text-[#0078d4] font-mono text-sm">{ticket.priorityScore}/100</strong></span>
                   </div>
                 </div>
 
-                <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
-                  <span className="text-xs text-slate-400 block mb-1">Assessed Severity Justification:</span>
-                  <p className="text-sm text-slate-200 font-medium">"{ticket.reason}"</p>
+                <div className="p-3 bg-[#f9fafb] rounded border border-gray-200 text-xs">
+                  <span className="text-gray-500 block mb-1 font-semibold">Severity Justification:</span>
+                  <p className="text-gray-800 font-medium">"{ticket.reason}"</p>
                 </div>
               </div>
 
               {/* Citizen Complaint & Evidence Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
                 {/* Left: Original Complaint */}
-                <div className="bg-slate-950 p-5 rounded-xl border border-slate-800 space-y-3">
+                <div className="bg-white p-4 rounded-fluent-md border border-gray-200 shadow-fluent-2 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                       Original Citizen Complaint
                     </span>
-                    <span className="text-xs px-2 py-0.5 bg-slate-900 border border-slate-800 text-blue-400 rounded flex items-center space-x-1">
-                      <Languages className="w-3 h-3" />
+                    <span className="text-xs px-2 py-0.5 bg-gray-100 border border-gray-200 text-gray-700 rounded flex items-center space-x-1">
+                      <Languages className="w-3 h-3 text-[#0078d4]" />
                       <span>{ticket.complaint?.language || 'English'}</span>
                     </span>
                   </div>
 
-                  <p className="text-sm text-slate-100 whitespace-pre-wrap bg-slate-900/60 p-3.5 rounded-lg border border-slate-800/80 leading-relaxed">
+                  <p className="text-sm text-gray-800 whitespace-pre-wrap bg-[#fafafa] p-3 rounded border border-gray-200 leading-relaxed">
                     {ticket.complaint?.originalText}
                   </p>
 
                   <div>
-                    <span className="text-xs text-slate-400 block mb-1 font-semibold">Normalized Officer Summary:</span>
-                    <p className="text-xs text-slate-300 italic bg-slate-900/40 p-2.5 rounded border border-slate-800">
+                    <span className="text-xs text-gray-500 block mb-1 font-semibold">Normalized English Summary:</span>
+                    <p className="text-xs text-gray-700 italic bg-[#fafafa] p-2 rounded border border-gray-200">
                       "{ticket.summary}"
                     </p>
                   </div>
 
-                  <div className="text-xs text-slate-400 pt-2 border-t border-slate-800/80 space-y-1">
+                  <div className="text-xs text-gray-500 pt-2 border-t border-gray-100 space-y-1">
                     <div className="flex items-center space-x-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-slate-500" />
-                      <span className="text-slate-200 font-medium">{ticket.complaint?.ward}</span>
+                      <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                      <span className="text-gray-800 font-medium">{ticket.complaint?.ward}</span>
                     </div>
-                    <p className="text-slate-400 pl-5">{ticket.complaint?.location}</p>
+                    <p className="text-gray-600 pl-5">{ticket.complaint?.location}</p>
                   </div>
                 </div>
 
                 {/* Right: Photograph Evidence */}
-                <div className="bg-slate-950 p-5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                <div className="bg-white p-4 rounded-fluent-md border border-gray-200 shadow-fluent-2 flex flex-col justify-between">
                   <div>
-                    <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-3">
-                      Incident Photograph Evidence
+                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-2">
+                      Photograph Evidence
                     </span>
                     {ticket.complaint?.photoUrl ? (
-                      <div className="relative group rounded-xl overflow-hidden border border-slate-800">
+                      <div className="rounded-fluent-md overflow-hidden border border-gray-200 bg-[#fafafa]">
                         <img
                           src={ticket.complaint.photoUrl}
                           alt="Incident verification"
-                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="w-full h-44 object-cover"
                         />
-                        <div className="absolute bottom-2 right-2 px-2 py-0.5 bg-black/70 backdrop-blur rounded text-[10px] text-white">
-                          Verified Attached Photo
-                        </div>
                       </div>
                     ) : (
-                      <div className="h-48 rounded-xl border border-dashed border-slate-800 flex flex-col items-center justify-center text-slate-500 text-xs">
-                        <FileText className="w-8 h-8 mb-2 opacity-40" />
+                      <div className="h-44 rounded-fluent-md border border-dashed border-gray-200 bg-[#fafafa] flex flex-col items-center justify-center text-gray-400 text-xs">
+                        <FileText className="w-8 h-8 mb-1.5 opacity-40" />
                         <span>No photograph uploaded by citizen</span>
                       </div>
                     )}
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                  <div className="mt-3 pt-2 border-t border-gray-100 text-xs text-gray-500">
                     <span>Submitted: {new Date(ticket.createdAt).toLocaleString()}</span>
                   </div>
                 </div>
@@ -240,30 +238,30 @@ export default function TicketDetailModal({
               </div>
 
               {/* Officer Override & Management Controls */}
-              <form onSubmit={handleSaveChanges} className="bg-slate-950 p-5 rounded-xl border border-slate-800 space-y-4">
+              <form onSubmit={handleSaveChanges} className="bg-white p-5 rounded-fluent-md border border-gray-200 shadow-fluent-2 space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <UserCheck className="w-5 h-5 text-blue-400" />
-                    <span className="text-sm font-bold text-white">Officer Override & Status Management</span>
+                    <UserCheck className="w-4 h-4 text-[#0078d4]" />
+                    <span className="text-sm font-bold text-gray-900">Officer Status & Re-routing Controls</span>
                   </div>
                   {saveSuccess && (
-                    <span className="text-xs text-emerald-400 font-semibold flex items-center space-x-1">
+                    <span className="text-xs text-[#107c41] font-semibold flex items-center space-x-1">
                       <CheckCircle2 className="w-4 h-4" />
                       <span>Changes saved & logged to audit trail!</span>
                     </span>
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {/* Status */}
                   <div>
-                    <label className="text-xs font-semibold text-slate-300 block mb-1.5">
+                    <label className="text-xs font-semibold text-gray-700 block mb-1">
                       Ticket Status
                     </label>
                     <select
                       value={status}
                       onChange={(e) => setStatus(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-100 font-semibold focus:border-blue-500"
+                      className="w-full bg-white border border-gray-300 rounded p-2 text-xs text-gray-900 font-semibold focus:border-[#0078d4]"
                     >
                       {statuses.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
@@ -271,13 +269,13 @@ export default function TicketDetailModal({
 
                   {/* Department Re-routing */}
                   <div>
-                    <label className="text-xs font-semibold text-slate-300 block mb-1.5">
-                      Responsible Department (Override)
+                    <label className="text-xs font-semibold text-gray-700 block mb-1">
+                      Department (Override)
                     </label>
                     <select
                       value={department}
                       onChange={(e) => setDepartment(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-100 font-semibold focus:border-blue-500 truncate"
+                      className="w-full bg-white border border-gray-300 rounded p-2 text-xs text-gray-900 font-semibold focus:border-[#0078d4] truncate"
                     >
                       {departments.map(d => <option key={d} value={d}>{d}</option>)}
                     </select>
@@ -285,13 +283,13 @@ export default function TicketDetailModal({
 
                   {/* Severity Adjustment */}
                   <div>
-                    <label className="text-xs font-semibold text-slate-300 block mb-1.5">
+                    <label className="text-xs font-semibold text-gray-700 block mb-1">
                       Severity Tier (Override)
                     </label>
                     <select
                       value={severity}
                       onChange={(e) => setSeverity(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-100 font-semibold focus:border-blue-500"
+                      className="w-full bg-white border border-gray-300 rounded p-2 text-xs text-gray-900 font-semibold focus:border-[#0078d4]"
                     >
                       {severities.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
@@ -300,30 +298,30 @@ export default function TicketDetailModal({
 
                 {/* Officer Notes */}
                 <div>
-                  <label className="text-xs font-semibold text-slate-300 block mb-1.5">
-                    Field Notes & Resolution Action
+                  <label className="text-xs font-semibold text-gray-700 block mb-1">
+                    Internal Field Notes & Resolution Details
                   </label>
                   <textarea
                     rows={2}
                     value={officerNotes}
                     onChange={(e) => setOfficerNotes(e.target.value)}
-                    placeholder="Enter dispatch notes, contractor assignment, or resolution details..."
-                    className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-100 placeholder-slate-500 focus:border-blue-500"
+                    placeholder="Enter dispatch notes, crew assignment, or resolution notes..."
+                    className="w-full bg-white border border-gray-300 rounded p-2.5 text-xs text-gray-900 placeholder-gray-400 focus:border-[#0078d4]"
                   />
                 </div>
 
-                <div className="flex justify-end">
+                <div className="flex justify-end pt-1">
                   <button
                     type="submit"
                     disabled={isSaving}
-                    className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white rounded-lg text-xs font-bold transition-colors flex items-center space-x-2"
+                    className="px-4 py-2 fluent-btn-primary text-xs flex items-center space-x-1.5"
                   >
                     {isSaving ? (
-                      <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                      <div className="w-3.5 h-3.5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
                     ) : (
                       <>
                         <Send className="w-3.5 h-3.5" />
-                        <span>Update Ticket & Log Audit Trail</span>
+                        <span>Save & Log to Audit Trail</span>
                       </>
                     )}
                   </button>
@@ -331,26 +329,26 @@ export default function TicketDetailModal({
               </form>
 
               {/* Activity Audit Trail */}
-              <div>
-                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-3">
-                  Historical Activity & Audit Trail
+              <div className="bg-white p-4 rounded-fluent-md border border-gray-200 shadow-fluent-2 space-y-3">
+                <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider block">
+                  Action Audit Trail
                 </span>
                 <div className="space-y-2">
                   {ticket.activityLogs && ticket.activityLogs.length > 0 ? (
                     ticket.activityLogs.map((log) => (
                       <div
                         key={log.id}
-                        className="p-3 bg-slate-950 rounded-xl border border-slate-800/80 text-xs flex items-start justify-between"
+                        className="p-3 bg-[#fafafa] rounded border border-gray-200 text-xs flex items-start justify-between"
                       >
                         <div>
                           <div className="flex items-center space-x-2">
-                            <span className="font-bold text-white">{log.action}</span>
-                            <span className="text-slate-500">•</span>
-                            <span className="text-blue-400 font-medium">{log.performedBy}</span>
+                            <span className="font-bold text-gray-900">{log.action}</span>
+                            <span className="text-gray-400">•</span>
+                            <span className="text-[#0078d4] font-medium">{log.performedBy}</span>
                           </div>
-                          <p className="text-slate-300 mt-1">{log.details}</p>
+                          <p className="text-gray-700 mt-0.5">{log.details}</p>
                         </div>
-                        <span className="text-[10px] text-slate-500 font-mono">
+                        <span className="text-[11px] text-gray-400 font-mono">
                           {new Date(log.timestamp).toLocaleString([], {
                             month: 'short',
                             day: 'numeric',
@@ -361,7 +359,7 @@ export default function TicketDetailModal({
                       </div>
                     ))
                   ) : (
-                    <p className="text-xs text-slate-500">No activity logs recorded yet.</p>
+                    <p className="text-xs text-gray-400">No activity logs recorded yet.</p>
                   )}
                 </div>
               </div>

@@ -6,15 +6,15 @@ import {
   MapPin,
   CheckCircle2,
   AlertTriangle,
-  Sparkles,
   Search,
   Clock,
   Building2,
-  ShieldAlert,
   ArrowRight,
   X,
   FileText,
-  Languages
+  Languages,
+  Check,
+  Info
 } from 'lucide-react';
 import { MUNICIPAL_WARDS, TEST_PRESETS } from '../data/wards';
 
@@ -30,8 +30,8 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
   const [detectedLang, setDetectedLang] = useState('English');
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Live AI Preview State
-  const [aiPreview, setAiPreview] = useState(null);
+  // Live Dispatch Preview State
+  const [dispatchPreview, setDispatchPreview] = useState(null);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
 
   // Success Confirmation State
@@ -54,10 +54,10 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
     }
   }, [text]);
 
-  // Debounced AI Preview as user writes complaint description
+  // Debounced Service Preview as citizen types
   useEffect(() => {
     if (!text || text.trim().length < 15) {
-      setAiPreview(null);
+      setDispatchPreview(null);
       return;
     }
 
@@ -71,10 +71,10 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
         });
         const data = await res.json();
         if (data.success) {
-          setAiPreview(data.aiResult);
+          setDispatchPreview(data.aiResult);
         }
       } catch (err) {
-        console.error('AI preview failed', err);
+        console.error('Preview request failed', err);
       } finally {
         setIsPreviewLoading(false);
       }
@@ -83,7 +83,7 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
     return () => clearTimeout(timer);
   }, [text, location]);
 
-  // Apply one of the 6 official mandatory test presets
+  // Apply one of the common test presets
   const handleLoadPreset = (preset) => {
     setText(preset.text);
     setWard(preset.ward);
@@ -92,21 +92,19 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
     setErrorMsg('');
   };
 
-  // Handle Photo File Upload (Convert to base64 with strict type & size validation)
+  // Handle Photo File Upload (Convert to base64 with strict validation)
   const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate MIME types
     const validMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg', 'image/gif'];
     if (!validMimes.includes(file.type)) {
-      setErrorMsg('Invalid file format. Please upload an image file (JPEG, PNG, WEBP, GIF).');
+      setErrorMsg('Please upload a valid image file (JPEG, PNG, WEBP).');
       return;
     }
 
-    // Validate size limit (5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setErrorMsg('Image file size exceeds maximum limit of 5MB. Please upload a smaller image.');
+      setErrorMsg('Image size exceeds 5MB limit. Please upload a smaller photo.');
       return;
     }
 
@@ -116,7 +114,7 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
       setErrorMsg('');
     };
     reader.onerror = () => {
-      setErrorMsg('Failed to read image file. Please try another photograph.');
+      setErrorMsg('Failed to process image. Please try another photograph.');
     };
     reader.readAsDataURL(file);
   };
@@ -125,7 +123,7 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!text.trim()) {
-      setErrorMsg('Please describe the civic complaint before submitting.');
+      setErrorMsg('Please provide a description of the issue before submitting.');
       return;
     }
 
@@ -147,7 +145,7 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
 
       const data = await response.json();
       if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Failed to submit complaint');
+        throw new Error(data.error || 'Failed to submit complaint. Please try again.');
       }
 
       setSubmissionResult(data);
@@ -165,7 +163,7 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
   const handleTrackTicket = async (idToSearch) => {
     const id = idToSearch || searchTicketId;
     if (!id || !id.trim()) {
-      setTrackerError('Please enter a Complaint ID or Ticket ID.');
+      setTrackerError('Please enter your Complaint ID or Ticket ID.');
       return;
     }
 
@@ -177,7 +175,7 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
       const res = await fetch(`/api/tickets/${id.trim()}`);
       const data = await res.json();
       if (!res.ok || !data.success) {
-        throw new Error(data.error || 'No matching ticket found for that ID.');
+        throw new Error(data.error || 'No matching record found. Please verify your ID.');
       }
       setTrackedTicket(data.ticket);
     } catch (err) {
@@ -190,166 +188,166 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
   const getSeverityBadge = (sev) => {
     switch (sev) {
       case 'CRITICAL':
-        return <span className="px-2.5 py-1 text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/40 rounded-full">CRITICAL</span>;
+        return (
+          <span className="px-2.5 py-0.5 text-xs font-semibold bg-[#fde7e9] text-[#c42b1c] border border-[#f8b8bc] rounded-fluent-sm">
+            Critical
+          </span>
+        );
       case 'HIGH':
-        return <span className="px-2.5 py-1 text-xs font-bold bg-orange-500/20 text-orange-400 border border-orange-500/40 rounded-full">HIGH PRIORITY</span>;
+        return (
+          <span className="px-2.5 py-0.5 text-xs font-semibold bg-[#fef0eb] text-[#bc4b09] border border-[#f9cebe] rounded-fluent-sm">
+            High Priority
+          </span>
+        );
       case 'MEDIUM':
-        return <span className="px-2.5 py-1 text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-full">MEDIUM</span>;
+        return (
+          <span className="px-2.5 py-0.5 text-xs font-semibold bg-[#fff4ce] text-[#8a6100] border border-[#feec9e] rounded-fluent-sm">
+            Medium Priority
+          </span>
+        );
       case 'LOW':
       default:
-        return <span className="px-2.5 py-1 text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 rounded-full">LOW</span>;
+        return (
+          <span className="px-2.5 py-0.5 text-xs font-semibold bg-[#dff6dd] text-[#107c41] border border-[#a8e5ab] rounded-fluent-sm">
+            Standard
+          </span>
+        );
     }
   };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       
-      {/* Sub Tabs: Submit vs Track */}
-      <div className="flex justify-center mb-8">
-        <div className="inline-flex p-1 bg-slate-800/90 rounded-xl border border-slate-700">
-          <button
-            onClick={() => setActiveSubTab('submit')}
-            className={`px-5 py-2 text-sm font-semibold rounded-lg transition-all ${
-              activeSubTab === 'submit'
-                ? 'bg-blue-600 text-white shadow'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            File New Complaint
-          </button>
-          <button
-            onClick={() => setActiveSubTab('track')}
-            className={`px-5 py-2 text-sm font-semibold rounded-lg transition-all ${
-              activeSubTab === 'track'
-                ? 'bg-blue-600 text-white shadow'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Track Status by ID
-          </button>
-        </div>
+      {/* Fluent 2 Pivot Navigation (Submit vs Track) */}
+      <div className="flex border-b border-gray-200 mb-8 justify-center sm:justify-start">
+        <button
+          onClick={() => setActiveSubTab('submit')}
+          className={`pb-3 px-4 text-sm font-semibold transition-colors relative ${
+            activeSubTab === 'submit'
+              ? 'text-[#0078d4] border-b-2 border-[#0078d4]'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          Submit a Complaint
+        </button>
+        <button
+          onClick={() => setActiveSubTab('track')}
+          className={`pb-3 px-4 text-sm font-semibold transition-colors relative ${
+            activeSubTab === 'track'
+              ? 'text-[#0078d4] border-b-2 border-[#0078d4]'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          Track Complaint Status
+        </button>
       </div>
 
       {activeSubTab === 'submit' ? (
         <div>
-          {/* Submission Success State */}
+          {/* Submission Success View */}
           {submissionResult ? (
-            <div className="max-w-3xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+            <div className="max-w-2xl mx-auto bg-white border border-gray-200 rounded-fluent-lg p-8 shadow-fluent-4">
               <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle2 className="w-9 h-9" />
+                <div className="w-12 h-12 bg-[#dff6dd] border border-[#a8e5ab] text-[#107c41] rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Check className="w-6 h-6 stroke-[2.5]" />
                 </div>
-                <h2 className="text-2xl font-bold text-white">Complaint Registered & Triaged!</h2>
-                <p className="text-slate-400 text-sm mt-1">
-                  CivicLens AI has analyzed, prioritized, and routed your issue to municipal field engineers.
+                <h2 className="text-2xl font-bold text-[#242424]">Complaint Registered</h2>
+                <p className="text-gray-600 text-sm mt-1">
+                  Your complaint has been logged and dispatched to the designated municipal department.
                 </p>
               </div>
 
-              {/* Ticket Summary Card */}
-              <div className="bg-slate-800/80 rounded-xl p-6 border border-slate-700/80 mb-6 space-y-4">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pb-4 border-b border-slate-700 text-xs">
+              {/* Confirmation Details Card */}
+              <div className="bg-[#fafafa] rounded-fluent-md p-5 border border-gray-200 mb-6 space-y-4 text-sm">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pb-4 border-b border-gray-200">
                   <div>
-                    <span className="text-slate-400 block mb-1">Complaint ID</span>
-                    <span className="font-mono font-bold text-white text-sm">{submissionResult.complaint.id}</span>
+                    <span className="text-xs text-gray-500 block mb-0.5">Complaint Number</span>
+                    <span className="font-semibold text-gray-900">{submissionResult.complaint.id}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block mb-1">Service Ticket</span>
-                    <span className="font-mono font-bold text-blue-400 text-sm">{submissionResult.ticket.id}</span>
+                    <span className="text-xs text-gray-500 block mb-0.5">Service Ticket ID</span>
+                    <span className="font-semibold text-[#0078d4]">{submissionResult.ticket.id}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block mb-1">AI Severity</span>
+                    <span className="text-xs text-gray-500 block mb-0.5">Priority Level</span>
                     <div>{getSeverityBadge(submissionResult.ticket.severity)}</div>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block mb-1">AI Confidence</span>
-                    <span className="font-semibold text-emerald-400 text-sm">
-                      {Math.round((submissionResult.ticket.aiConfidence || 0.95) * 100)}%
-                    </span>
                   </div>
                 </div>
 
                 <div>
-                  <span className="text-xs text-slate-400 block mb-1">Routed Municipal Department</span>
-                  <div className="flex items-center space-x-2 text-white font-semibold">
-                    <Building2 className="w-4 h-4 text-blue-400" />
+                  <span className="text-xs text-gray-500 block mb-1">Routed Department</span>
+                  <div className="flex items-center space-x-2 text-gray-900 font-semibold">
+                    <Building2 className="w-4 h-4 text-[#0078d4]" />
                     <span>{submissionResult.ticket.department}</span>
                   </div>
                 </div>
 
                 <div>
-                  <span className="text-xs text-slate-400 block mb-1">AI Severity Justification</span>
-                  <p className="text-sm text-slate-200 bg-slate-900/60 p-3 rounded-lg border border-slate-800">
-                    "{submissionResult.ticket.reason}"
+                  <span className="text-xs text-gray-500 block mb-1">Assessed Routing Justification</span>
+                  <p className="text-gray-700 bg-white p-3 rounded border border-gray-200 text-xs">
+                    {submissionResult.ticket.reason}
                   </p>
                 </div>
 
                 {submissionResult.duplicateInfo?.isDuplicate && (
-                  <div className="bg-amber-500/10 border border-amber-500/30 p-3.5 rounded-lg text-xs text-amber-300">
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="flex items-center space-x-1.5 font-bold">
-                        <AlertTriangle className="w-4 h-4" />
-                        <span>Probable Duplicate Incident Grouped</span>
-                      </div>
-                      <span className="font-mono font-bold text-xs bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/40">
-                        {Math.round((submissionResult.duplicateInfo.similarityScore || 0.8) * 100)}% Match
-                      </span>
+                  <div className="bg-[#fff4ce] border border-[#feec9e] p-3 rounded text-xs text-[#8a6100]">
+                    <div className="flex items-center space-x-1.5 font-bold mb-0.5">
+                      <Info className="w-4 h-4" />
+                      <span>Related Incident Clustered</span>
                     </div>
-                    <p className="text-amber-200/90 leading-relaxed">
-                      {submissionResult.duplicateInfo.reason || `Matches active ticket ${submissionResult.duplicateInfo.matchedTicketId}. Grouped for officer review without being discarded.`}
+                    <p className="leading-relaxed">
+                      {submissionResult.duplicateInfo.reason || 'This matches an open report in the same area. Your report is securely linked to the active work order.'}
                     </p>
                   </div>
                 )}
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <div className="flex flex-col sm:flex-row items-center justify-end gap-3">
                 <button
+                  type="button"
+                  onClick={() => {
+                    setSubmissionResult(null);
+                    setText('');
+                    setPhotoUrl('');
+                    setDispatchPreview(null);
+                  }}
+                  className="w-full sm:w-auto px-4 py-2 fluent-btn-secondary text-sm"
+                >
+                  Submit Another Report
+                </button>
+                <button
+                  type="button"
                   onClick={() => {
                     setSearchTicketId(submissionResult.ticket.id);
                     setActiveSubTab('track');
                     handleTrackTicket(submissionResult.ticket.id);
                   }}
-                  className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm font-semibold transition-colors flex items-center justify-center space-x-2"
+                  className="w-full sm:w-auto px-5 py-2 fluent-btn-primary text-sm flex items-center justify-center space-x-2"
                 >
                   <Search className="w-4 h-4" />
-                  <span>Track Live Ticket Status</span>
-                </button>
-
-                <button
-                  onClick={() => {
-                    setSubmissionResult(null);
-                    setText('');
-                    setPhotoUrl('');
-                    setAiPreview(null);
-                  }}
-                  className="w-full sm:w-auto px-6 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm font-semibold transition-colors"
-                >
-                  Submit Another Complaint
+                  <span>Track This Complaint</span>
                 </button>
               </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               
-              {/* Left Column: Form & Presets (7 cols) */}
+              {/* Left Column: Citizen Form & Quick-Fill (7 cols) */}
               <div className="lg:col-span-7 space-y-6">
                 
-                {/* Hero Card */}
-                <div className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-800 p-6 rounded-2xl shadow-xl">
-                  <div className="inline-flex items-center space-x-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-full text-xs font-semibold mb-3">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>Real-Time Generative AI Triage</span>
-                  </div>
-                  <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                    Citizen Complaint Portal
+                {/* Welcoming Header */}
+                <div className="bg-white border border-gray-200 p-6 rounded-fluent-lg shadow-fluent-2">
+                  <h1 className="text-2xl font-bold text-[#242424] tracking-tight">
+                    Submit a Municipal Service Request
                   </h1>
-                  <p className="text-slate-400 text-sm mt-1">
-                    Describe your municipal issue in English or regional languages (Kannada/Hindi). CivicLens AI automatically classifies, prioritizes, and routes your ticket to the right department.
+                  <p className="text-gray-600 text-sm mt-1 leading-relaxed">
+                    Report public infrastructure issues directly to city operations. You can write in English, Kannada, or Hindi.
                   </p>
 
-                  {/* 1-Click Test Presets */}
-                  <div className="mt-5 pt-4 border-t border-slate-800">
-                    <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">
-                      Instant Test Scenarios (1-Click Fill)
+                  {/* Common Report Presets */}
+                  <div className="mt-5 pt-4 border-t border-gray-100">
+                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-2">
+                      Common Incident Examples (Click to Fill)
                     </span>
                     <div className="flex flex-wrap gap-2">
                       {TEST_PRESETS.map((preset) => (
@@ -357,12 +355,12 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
                           key={preset.id}
                           type="button"
                           onClick={() => handleLoadPreset(preset)}
-                          className="px-2.5 py-1 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 rounded-lg transition-colors flex items-center space-x-1"
+                          className="px-2.5 py-1 text-xs font-medium bg-[#f5f5f5] hover:bg-gray-200 text-gray-700 border border-gray-200 rounded transition-colors flex items-center space-x-1.5"
                         >
-                          <span className={`w-1.5 h-1.5 rounded-full ${
-                            preset.severity === 'CRITICAL' ? 'bg-red-500' :
-                            preset.severity === 'HIGH' ? 'bg-orange-500' :
-                            preset.severity === 'MEDIUM' ? 'bg-amber-400' : 'bg-emerald-400'
+                          <span className={`w-2 h-2 rounded-full ${
+                            preset.severity === 'CRITICAL' ? 'bg-[#c42b1c]' :
+                            preset.severity === 'HIGH' ? 'bg-[#bc4b09]' :
+                            preset.severity === 'MEDIUM' ? 'bg-[#8a6100]' : 'bg-[#107c41]'
                           }`}></span>
                           <span>{preset.label}</span>
                         </button>
@@ -371,10 +369,10 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
                   </div>
                 </div>
 
-                {/* Submission Form */}
-                <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-5">
+                {/* Form Card */}
+                <form onSubmit={handleSubmit} className="bg-white border border-gray-200 p-6 rounded-fluent-lg shadow-fluent-2 space-y-5">
                   {errorMsg && (
-                    <div className="p-3 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl text-xs font-medium flex items-center space-x-2">
+                    <div className="p-3 bg-[#fde7e9] border border-[#f8b8bc] text-[#c42b1c] rounded text-xs font-medium flex items-center space-x-2">
                       <AlertTriangle className="w-4 h-4 flex-shrink-0" />
                       <span>{errorMsg}</span>
                     </div>
@@ -382,38 +380,38 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
 
                   {/* Complaint Description */}
                   <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <label className="text-sm font-semibold text-slate-200">
-                        Complaint Description <span className="text-red-400">*</span>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-sm font-semibold text-gray-800">
+                        Describe the Issue <span className="text-[#c42b1c]">*</span>
                       </label>
                       <div className="flex items-center space-x-2 text-xs">
-                        <span className="px-2 py-0.5 bg-slate-800 border border-slate-700 text-blue-400 rounded flex items-center space-x-1">
-                          <Languages className="w-3 h-3" />
-                          <span>Detected: {detectedLang}</span>
+                        <span className="px-2 py-0.5 bg-gray-100 border border-gray-200 text-gray-700 rounded flex items-center space-x-1">
+                          <Languages className="w-3 h-3 text-[#0078d4]" />
+                          <span>Language: {detectedLang}</span>
                         </span>
-                        <span className="text-slate-400">{text.length} chars</span>
                       </div>
                     </div>
                     <textarea
                       rows={4}
                       value={text}
                       onChange={(e) => setText(e.target.value)}
-                      placeholder="e.g. Exposed live wire hanging near school gate with sparks, or ರಸ್ತೆಯಲ್ಲಿ ದೊಡ್ಡ ಗುಂಡಿ ಬಿದ್ದಿದೆ..."
-                      className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl p-3.5 text-sm text-slate-100 placeholder-slate-500 transition-colors"
+                      placeholder="Please describe what happened, where it is located, and any safety hazards..."
+                      className="w-full bg-white border border-gray-300 focus:border-[#0078d4] focus:ring-1 focus:ring-[#0078d4] rounded-fluent-sm p-3 text-sm text-gray-900 placeholder-gray-400"
                       required
                     />
+                    <span className="text-[11px] text-gray-500 block mt-1">Minimum 5 characters. Be as specific as possible.</span>
                   </div>
 
                   {/* Ward and Location Inputs */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-semibold text-slate-200 block mb-1.5">
-                        Municipal Ward <span className="text-red-400">*</span>
+                      <label className="text-sm font-semibold text-gray-800 block mb-1.5">
+                        City Ward <span className="text-[#c42b1c]">*</span>
                       </label>
                       <select
                         value={ward}
                         onChange={(e) => setWard(e.target.value)}
-                        className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-xl p-2.5 text-sm text-slate-200"
+                        className="w-full bg-white border border-gray-300 focus:border-[#0078d4] focus:ring-1 focus:ring-[#0078d4] rounded-fluent-sm p-2.5 text-sm text-gray-900"
                       >
                         {MUNICIPAL_WARDS.map((w) => (
                           <option key={w} value={w}>{w}</option>
@@ -422,17 +420,17 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
                     </div>
 
                     <div>
-                      <label className="text-sm font-semibold text-slate-200 block mb-1.5">
+                      <label className="text-sm font-semibold text-gray-800 block mb-1.5">
                         Specific Location / Landmark
                       </label>
                       <div className="relative">
-                        <MapPin className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                        <MapPin className="w-4 h-4 text-gray-400 absolute left-3 top-3" />
                         <input
                           type="text"
                           value={location}
                           onChange={(e) => setLocation(e.target.value)}
-                          placeholder="e.g. 4th Cross, Opposite School Gate"
-                          className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-xl pl-9 pr-3 py-2 text-sm text-slate-200 placeholder-slate-500"
+                          placeholder="e.g. Near St. Joseph School Gate"
+                          className="w-full bg-white border border-gray-300 focus:border-[#0078d4] focus:ring-1 focus:ring-[#0078d4] rounded-fluent-sm pl-9 pr-3 py-2 text-sm text-gray-900 placeholder-gray-400"
                         />
                       </div>
                     </div>
@@ -440,45 +438,46 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
 
                   {/* Photo Upload Section */}
                   <div>
-                    <label className="text-sm font-semibold text-slate-200 block mb-1.5">
-                      Incident Photograph (Optional Evidence)
+                    <label className="text-sm font-semibold text-gray-800 block mb-1.5">
+                      Upload Photo (Optional)
                     </label>
 
                     {photoUrl ? (
-                      <div className="relative bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
+                      <div className="bg-[#f9fafb] border border-gray-200 rounded-fluent-md p-3 flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           <img
                             src={photoUrl}
-                            alt="Incident Evidence"
-                            className="w-16 h-16 object-cover rounded-lg border border-slate-700"
+                            alt="Uploaded evidence"
+                            className="w-14 h-14 object-cover rounded border border-gray-200"
                           />
                           <div>
-                            <span className="text-xs font-semibold text-emerald-400 flex items-center space-x-1">
+                            <span className="text-xs font-semibold text-[#107c41] flex items-center space-x-1">
                               <CheckCircle2 className="w-3.5 h-3.5" />
-                              <span>Photo Attached</span>
+                              <span>Photograph Attached</span>
                             </span>
-                            <span className="text-[11px] text-slate-400 block mt-0.5">Ready for automated inspection</span>
+                            <span className="text-[11px] text-gray-500 block mt-0.5">Attached to service ticket</span>
                           </div>
                         </div>
                         <button
                           type="button"
                           onClick={() => setPhotoUrl('')}
-                          className="p-1.5 text-slate-400 hover:text-red-400 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
+                          className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-gray-200 rounded transition-colors"
+                          title="Remove photo"
                         >
                           <X className="w-4 h-4" />
                         </button>
                       </div>
                     ) : (
-                      <div className="border-2 border-dashed border-slate-800 hover:border-slate-700 bg-slate-950/60 rounded-xl p-4 text-center cursor-pointer transition-colors">
+                      <div className="border border-dashed border-gray-300 hover:border-gray-400 bg-[#fafafa] rounded-fluent-md p-4 text-center cursor-pointer transition-colors">
                         <label className="cursor-pointer block">
-                          <Upload className="w-6 h-6 text-slate-400 mx-auto mb-1.5" />
-                          <span className="text-xs text-slate-300 font-medium block">
-                            Click to upload image or drag & drop
+                          <Upload className="w-5 h-5 text-gray-500 mx-auto mb-1" />
+                          <span className="text-xs text-gray-700 font-medium block">
+                            Click to select an image or drag and drop
                           </span>
-                          <span className="text-[10px] text-slate-500 block mt-0.5">PNG, JPG up to 5MB</span>
+                          <span className="text-[11px] text-gray-400 block mt-0.5">PNG, JPG, or WEBP up to 5MB</span>
                           <input
                             type="file"
-                            accept="image/*"
+                            accept="image/png,image/jpeg,image/webp,image/jpg"
                             onChange={handlePhotoUpload}
                             className="hidden"
                           />
@@ -488,107 +487,87 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
                   </div>
 
                   {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={isSubmitting || !text.trim()}
-                    className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-50 text-white font-semibold rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center space-x-2"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
-                        <span>Processing AI Triage...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4" />
-                        <span>Submit Municipal Complaint</span>
-                      </>
-                    )}
-                  </button>
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting || !text.trim()}
+                      className="w-full py-2.5 px-4 fluent-btn-primary text-sm flex items-center justify-center space-x-2"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                          <span>Routing Complaint...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>Submit Complaint</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </form>
 
               </div>
 
-              {/* Right Column: Live AI Triage Inspector (5 cols) */}
+              {/* Right Column: Service Routing Overview (5 cols) */}
               <div className="lg:col-span-5 space-y-6">
                 
-                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl sticky top-24">
-                  <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-                    <div className="flex items-center space-x-2">
-                      <Sparkles className="w-5 h-5 text-blue-400" />
-                      <h3 className="font-bold text-white text-base">Live AI Triage Inspector</h3>
-                    </div>
+                <div className="bg-white border border-gray-200 rounded-fluent-lg p-6 shadow-fluent-2 sticky top-24">
+                  <div className="flex items-center justify-between pb-3 border-b border-gray-200">
+                    <h3 className="font-semibold text-gray-900 text-base">Automatic Dispatch Preview</h3>
                     {isPreviewLoading ? (
-                      <span className="text-xs font-mono text-blue-400 animate-pulse">Analyzing...</span>
+                      <span className="text-xs text-[#0078d4] font-medium animate-pulse">Evaluating...</span>
                     ) : (
-                      <span className="text-xs font-mono text-emerald-400">Ready</span>
+                      <span className="text-xs text-gray-500">Live</span>
                     )}
                   </div>
 
-                  {aiPreview ? (
-                    <div className="mt-5 space-y-4">
+                  {dispatchPreview ? (
+                    <div className="mt-4 space-y-3 text-sm">
                       
-                      {/* Predicted Severity */}
-                      <div className="p-4 bg-slate-950 rounded-xl border border-slate-800">
-                        <span className="text-xs text-slate-400 block mb-1">Assessed Severity</span>
+                      <div className="p-3 bg-[#fafafa] rounded border border-gray-200">
+                        <span className="text-xs text-gray-500 block mb-1">Assessed Urgency</span>
                         <div className="flex items-center justify-between">
-                          <div>{getSeverityBadge(aiPreview.severity)}</div>
-                          <span className="text-xs font-mono text-slate-400">
-                            Risk Score: <strong className="text-white">{aiPreview.priority_score}/100</strong>
+                          <div>{getSeverityBadge(dispatchPreview.severity)}</div>
+                          <span className="text-xs text-gray-600 font-medium">
+                            Category: <strong className="text-gray-900">{dispatchPreview.category}</strong>
                           </span>
                         </div>
-                        <p className="text-xs text-slate-300 mt-2.5 bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                          {aiPreview.reason}
+                        <p className="text-xs text-gray-700 mt-2 bg-white p-2.5 rounded border border-gray-200">
+                          {dispatchPreview.reason}
                         </p>
                       </div>
 
-                      {/* Predicted Category & Department */}
-                      <div className="grid grid-cols-2 gap-3 text-xs">
-                        <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                          <span className="text-slate-400 block mb-1">Category</span>
-                          <span className="font-semibold text-white text-sm">{aiPreview.category}</span>
-                        </div>
-                        <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                          <span className="text-slate-400 block mb-1">AI Confidence</span>
-                          <span className="font-semibold text-emerald-400 text-sm">
-                            {Math.round((aiPreview.confidence || 0.95) * 100)}%
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Routed Department */}
-                      <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                        <span className="text-xs text-slate-400 block mb-1">Auto-Routed Department</span>
-                        <div className="flex items-center space-x-2 text-blue-400 font-semibold text-xs">
+                      <div className="p-3 bg-[#fafafa] rounded border border-gray-200">
+                        <span className="text-xs text-gray-500 block mb-1">Designated Department</span>
+                        <div className="flex items-center space-x-2 text-[#0078d4] font-semibold text-xs">
                           <Building2 className="w-4 h-4 flex-shrink-0" />
-                          <span className="truncate">{aiPreview.department}</span>
+                          <span className="truncate">{dispatchPreview.department}</span>
                         </div>
                       </div>
 
-                      {/* Normalized Summary */}
-                      <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                        <span className="text-xs text-slate-400 block mb-1">Normalized Officer Summary</span>
-                        <p className="text-xs text-slate-200 italic">
-                          "{aiPreview.summary}"
+                      <div className="p-3 bg-[#fafafa] rounded border border-gray-200">
+                        <span className="text-xs text-gray-500 block mb-1">Issue Summary</span>
+                        <p className="text-xs text-gray-700 italic">
+                          "{dispatchPreview.summary}"
                         </p>
                       </div>
 
                     </div>
                   ) : (
-                    <div className="py-12 text-center text-slate-500">
-                      <FileText className="w-10 h-10 mx-auto mb-2 opacity-40" />
-                      <p className="text-xs">Type your complaint or click any test scenario above to see live AI classification in real time.</p>
+                    <div className="py-10 text-center text-gray-500">
+                      <FileText className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                      <p className="text-xs text-gray-500 leading-relaxed">
+                        Start describing your complaint to preview the automatically assigned department and priority.
+                      </p>
                     </div>
                   )}
 
-                  {/* Explanatory Feature Callout */}
-                  <div className="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-400 space-y-1.5">
-                    <div className="flex items-center space-x-1.5 text-slate-300 font-medium">
-                      <ShieldAlert className="w-3.5 h-3.5 text-blue-400" />
-                      <span>Deterministic Triage Guarantee</span>
-                    </div>
+                  <div className="mt-5 pt-3 border-t border-gray-100 text-[11px] text-gray-500 space-y-1">
+                    <span className="font-semibold text-gray-700 block">Service Assurance</span>
                     <p>
-                      Official categories deterministically bind to civic departments according to municipal dispatch policy.
+                      Every complaint is logged with an immutable tracking ID and deterministically routed to city engineers.
                     </p>
                   </div>
                 </div>
@@ -600,11 +579,11 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
         </div>
       ) : (
         /* Status Tracker Tab */
-        <div className="max-w-3xl mx-auto space-y-6">
-          <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl">
-            <h2 className="text-xl font-bold text-white mb-2">Track Your Civic Complaint</h2>
-            <p className="text-slate-400 text-xs mb-4">
-              Enter your Complaint ID (e.g. <span className="font-mono text-blue-400">CMP-8801</span>) or Ticket ID (e.g. <span className="font-mono text-blue-400">TKT-1001</span>).
+        <div className="max-w-2xl mx-auto space-y-6">
+          <div className="bg-white border border-gray-200 p-6 rounded-fluent-lg shadow-fluent-2">
+            <h2 className="text-xl font-bold text-[#242424] mb-1">Track Your Service Ticket</h2>
+            <p className="text-gray-600 text-xs mb-4">
+              Enter your Complaint Number (e.g. <span className="font-semibold text-[#0078d4]">CMP-8801</span>) or Service Ticket ID (e.g. <span className="font-semibold text-[#0078d4]">TKT-1001</span>).
             </p>
 
             <div className="flex gap-2">
@@ -613,12 +592,13 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
                 value={searchTicketId}
                 onChange={(e) => setSearchTicketId(e.target.value)}
                 placeholder="Enter CMP-xxxx or TKT-xxxx"
-                className="flex-1 bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 uppercase font-mono"
+                className="flex-1 bg-white border border-gray-300 focus:border-[#0078d4] focus:ring-1 focus:ring-[#0078d4] rounded-fluent-sm px-3.5 py-2 text-sm text-gray-900 uppercase font-mono"
               />
               <button
+                type="button"
                 onClick={() => handleTrackTicket()}
                 disabled={trackerLoading}
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-semibold transition-colors flex items-center space-x-2"
+                className="px-5 py-2 fluent-btn-primary text-sm flex items-center space-x-1.5"
               >
                 {trackerLoading ? (
                   <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
@@ -632,74 +612,74 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
             </div>
 
             {trackerError && (
-              <p className="mt-3 text-xs text-red-400 font-medium">{trackerError}</p>
+              <p className="mt-3 text-xs text-[#c42b1c] font-medium">{trackerError}</p>
             )}
           </div>
 
-          {/* Tracked Ticket Result */}
+          {/* Tracked Ticket Card */}
           {trackedTicket && (
-            <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div className="bg-white border border-gray-200 p-6 rounded-fluent-lg shadow-fluent-2 space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-gray-200">
                 <div>
-                  <span className="text-xs text-slate-400">Service Ticket ID</span>
-                  <h3 className="text-xl font-mono font-bold text-white">{trackedTicket.id}</h3>
+                  <span className="text-xs text-gray-500 block">Service Ticket ID</span>
+                  <h3 className="text-xl font-mono font-bold text-gray-900">{trackedTicket.id}</h3>
                 </div>
                 <div>{getSeverityBadge(trackedTicket.severity)}</div>
               </div>
 
-              {/* Status Stepper */}
+              {/* Resolution Stepper */}
               <div>
-                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-4">
-                  Resolution Progress
+                <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-3">
+                  Resolution Stepper
                 </span>
                 <div className="grid grid-cols-3 gap-2">
-                  <div className={`p-3 rounded-xl border text-center ${
+                  <div className={`p-3 rounded border text-center ${
                     ['Pending', 'In Progress', 'Resolved'].includes(trackedTicket.status)
-                      ? 'bg-blue-500/10 border-blue-500/40 text-blue-400'
-                      : 'bg-slate-950 border-slate-800 text-slate-500'
+                      ? 'bg-[#eff6fc] border-[#b4d6fa] text-[#0078d4]'
+                      : 'bg-gray-50 border-gray-200 text-gray-400'
                   }`}>
-                    <span className="text-xs font-bold block">1. Triaged</span>
-                    <span className="text-[10px] text-slate-400">AI Verified</span>
+                    <span className="text-xs font-bold block">1. Received</span>
+                    <span className="text-[10px] text-gray-500">Triage Complete</span>
                   </div>
 
-                  <div className={`p-3 rounded-xl border text-center ${
+                  <div className={`p-3 rounded border text-center ${
                     ['In Progress', 'Resolved'].includes(trackedTicket.status)
-                      ? 'bg-amber-500/10 border-amber-500/40 text-amber-300'
-                      : 'bg-slate-950 border-slate-800 text-slate-500'
+                      ? 'bg-[#eff6fc] border-[#b4d6fa] text-[#0078d4]'
+                      : 'bg-gray-50 border-gray-200 text-gray-400'
                   }`}>
                     <span className="text-xs font-bold block">2. In Progress</span>
-                    <span className="text-[10px] text-slate-400">Field Dispatch</span>
+                    <span className="text-[10px] text-gray-500">Field Dispatch</span>
                   </div>
 
-                  <div className={`p-3 rounded-xl border text-center ${
+                  <div className={`p-3 rounded border text-center ${
                     trackedTicket.status === 'Resolved'
-                      ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400'
-                      : 'bg-slate-950 border-slate-800 text-slate-500'
+                      ? 'bg-[#dff6dd] border-[#a8e5ab] text-[#107c41]'
+                      : 'bg-gray-50 border-gray-200 text-gray-400'
                   }`}>
                     <span className="text-xs font-bold block">3. Resolved</span>
-                    <span className="text-[10px] text-slate-400">Action Complete</span>
+                    <span className="text-[10px] text-gray-500">Work Finished</span>
                   </div>
                 </div>
               </div>
 
               {/* Ticket Details Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
-                  <span className="text-slate-400 block mb-1">Assigned Department</span>
-                  <span className="font-semibold text-white">{trackedTicket.department}</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div className="bg-[#fafafa] p-3 rounded border border-gray-200">
+                  <span className="text-gray-500 block mb-0.5">Assigned Department</span>
+                  <span className="font-semibold text-gray-900">{trackedTicket.department}</span>
                 </div>
-                <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
-                  <span className="text-slate-400 block mb-1">Ward & Location</span>
-                  <span className="font-semibold text-white">
+                <div className="bg-[#fafafa] p-3 rounded border border-gray-200">
+                  <span className="text-gray-500 block mb-0.5">Ward & Location</span>
+                  <span className="font-semibold text-gray-900">
                     {trackedTicket.complaint?.ward} • {trackedTicket.complaint?.location}
                   </span>
                 </div>
               </div>
 
               {/* Original Complaint */}
-              <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                <span className="text-xs text-slate-400 block mb-1">Original Complaint Text ({trackedTicket.complaint?.language})</span>
-                <p className="text-sm text-slate-200">
+              <div className="bg-[#fafafa] p-4 rounded border border-gray-200 text-sm">
+                <span className="text-xs text-gray-500 block mb-1">Submitted Description</span>
+                <p className="text-gray-900 leading-relaxed">
                   {trackedTicket.complaint?.originalText}
                 </p>
                 {trackedTicket.complaint?.photoUrl && (
@@ -707,7 +687,7 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
                     <img
                       src={trackedTicket.complaint.photoUrl}
                       alt="Submitted evidence"
-                      className="w-32 h-24 object-cover rounded-lg border border-slate-700"
+                      className="w-32 h-24 object-cover rounded border border-gray-200"
                     />
                   </div>
                 )}
@@ -716,17 +696,17 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
               {/* Activity Timeline */}
               {trackedTicket.activityLogs && trackedTicket.activityLogs.length > 0 && (
                 <div>
-                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-3">
-                    Audit Log & Activity
+                  <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-2">
+                    Action Timeline
                   </span>
                   <div className="space-y-2">
                     {trackedTicket.activityLogs.map((log) => (
-                      <div key={log.id} className="p-3 bg-slate-950/80 rounded-xl border border-slate-800/80 text-xs flex items-start justify-between">
+                      <div key={log.id} className="p-3 bg-[#fafafa] rounded border border-gray-200 text-xs flex items-start justify-between">
                         <div>
-                          <span className="font-semibold text-white">{log.action}: {log.performedBy}</span>
-                          <p className="text-slate-400 mt-0.5">{log.details}</p>
+                          <span className="font-semibold text-gray-900">{log.action}: {log.performedBy}</span>
+                          <p className="text-gray-600 mt-0.5">{log.details}</p>
                         </div>
-                        <span className="text-[10px] text-slate-500 font-mono">
+                        <span className="text-[11px] text-gray-400 font-mono">
                           {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>

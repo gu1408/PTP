@@ -86,29 +86,29 @@ export default function OfficerDashboard({
     switch (sev) {
       case 'CRITICAL':
         return (
-          <span className="inline-flex items-center space-x-1 px-2.5 py-1 text-xs font-extrabold bg-red-500/20 text-red-400 border border-red-500/50 rounded-full animate-pulse">
-            <Flame className="w-3 h-3 text-red-400" />
-            <span>CRITICAL</span>
+          <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 text-xs font-bold bg-[#fde7e9] text-[#c42b1c] border border-[#f8b8bc] rounded-fluent-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#c42b1c]"></span>
+            <span>Critical</span>
           </span>
         );
       case 'HIGH':
         return (
-          <span className="inline-flex items-center space-x-1 px-2.5 py-1 text-xs font-bold bg-orange-500/20 text-orange-400 border border-orange-500/50 rounded-full">
-            <AlertTriangle className="w-3 h-3 text-orange-400" />
-            <span>HIGH</span>
+          <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 text-xs font-bold bg-[#fef0eb] text-[#bc4b09] border border-[#f9cebe] rounded-fluent-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#bc4b09]"></span>
+            <span>High</span>
           </span>
         );
       case 'MEDIUM':
         return (
-          <span className="inline-flex items-center space-x-1 px-2 py-0.5 text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-full">
-            <span>MEDIUM</span>
+          <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 text-xs font-semibold bg-[#fff4ce] text-[#8a6100] border border-[#feec9e] rounded-fluent-sm">
+            <span>Medium</span>
           </span>
         );
       case 'LOW':
       default:
         return (
-          <span className="inline-flex items-center space-x-1 px-2 py-0.5 text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 rounded-full">
-            <span>LOW</span>
+          <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 text-xs font-medium bg-[#dff6dd] text-[#107c41] border border-[#a8e5ab] rounded-fluent-sm">
+            <span>Low</span>
           </span>
         );
     }
@@ -117,129 +117,129 @@ export default function OfficerDashboard({
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Pending':
-        return <span className="px-2.5 py-0.5 text-xs font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/30 rounded-full">Pending</span>;
+        return <span className="px-2 py-0.5 text-xs font-semibold bg-[#fff4ce] text-[#8a6100] border border-[#feec9e] rounded">Pending</span>;
       case 'In Progress':
-        return <span className="px-2.5 py-0.5 text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/30 rounded-full">In Progress</span>;
+        return <span className="px-2 py-0.5 text-xs font-semibold bg-[#eff6fc] text-[#0078d4] border border-[#b4d6fa] rounded">In Progress</span>;
       case 'Resolved':
-        return <span className="px-2.5 py-0.5 text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-full">Resolved</span>;
+        return <span className="px-2 py-0.5 text-xs font-semibold bg-[#dff6dd] text-[#107c41] border border-[#a8e5ab] rounded">Resolved</span>;
       default:
-        return <span className="px-2.5 py-0.5 text-xs font-medium bg-slate-800 text-slate-400 rounded-full">{status}</span>;
+        return <span className="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-700 rounded">{status}</span>;
     }
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       
-      {/* Top Header & Actions */}
+      {/* Top Header & Refresh Action */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#242424] tracking-tight">
               Municipal Officer Command Center
             </h1>
-            <span className="px-2 py-0.5 bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-mono font-bold rounded">
-              LIVE DISPATCH
+            <span className="px-2 py-0.5 bg-[#eff6fc] border border-[#b4d6fa] text-[#0078d4] text-xs font-semibold rounded">
+              Live Queue
             </span>
           </div>
-          <p className="text-slate-400 text-sm mt-1">
-            Automated priority queuing conforming to municipal emergency response protocols.
+          <p className="text-gray-600 text-sm mt-1">
+            Prioritized municipal triage queue sorted by public safety urgency and response time.
           </p>
         </div>
 
         <button
+          type="button"
           onClick={onRefresh}
-          className="inline-flex items-center space-x-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-sm font-semibold transition-all self-start sm:self-auto"
+          className="fluent-btn-secondary px-3.5 py-2 text-xs flex items-center space-x-2 self-start sm:self-auto"
         >
-          <RefreshCw className="w-4 h-4 text-blue-400" />
-          <span>Refresh Queue</span>
+          <RefreshCw className="w-3.5 h-3.5 text-[#0078d4]" />
+          <span>Refresh Tickets</span>
         </button>
       </div>
 
-      {/* KPI Metrics Grid */}
+      {/* Fluent 2 KPI Cards Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         
         {/* Total Complaints */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
-          <span className="text-xs font-medium text-slate-400 block mb-1">Total Complaints</span>
+        <div className="bg-white border border-gray-200 p-4 rounded-fluent-md shadow-fluent-2">
+          <span className="text-xs font-medium text-gray-500 block mb-1">Total Complaints</span>
           <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-black text-white">{metrics?.total || 0}</span>
-            <FileText className="w-4 h-4 text-slate-500" />
+            <span className="text-2xl font-bold text-gray-900">{metrics?.total || 0}</span>
+            <FileText className="w-4 h-4 text-gray-400" />
           </div>
         </div>
 
         {/* Critical Complaints */}
-        <div className="bg-slate-900 border border-red-500/30 p-4 rounded-xl shadow relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-16 h-16 bg-red-500/5 rounded-full -mr-6 -mt-6"></div>
-          <span className="text-xs font-medium text-red-400 block mb-1">Critical Urgency</span>
+        <div className="bg-white border-l-4 border-l-[#c42b1c] border-y border-r border-gray-200 p-4 rounded-fluent-md shadow-fluent-2">
+          <span className="text-xs font-medium text-[#c42b1c] block mb-1">Critical Urgency</span>
           <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-black text-red-400">{metrics?.critical || 0}</span>
-            <Flame className="w-4 h-4 text-red-400 animate-pulse" />
+            <span className="text-2xl font-bold text-[#c42b1c]">{metrics?.critical || 0}</span>
+            <Flame className="w-4 h-4 text-[#c42b1c]" />
           </div>
         </div>
 
         {/* High Priority */}
-        <div className="bg-slate-900 border border-orange-500/30 p-4 rounded-xl shadow">
-          <span className="text-xs font-medium text-orange-400 block mb-1">High Priority</span>
+        <div className="bg-white border-l-4 border-l-[#bc4b09] border-y border-r border-gray-200 p-4 rounded-fluent-md shadow-fluent-2">
+          <span className="text-xs font-medium text-[#bc4b09] block mb-1">High Priority</span>
           <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-black text-orange-400">{metrics?.high || 0}</span>
-            <AlertTriangle className="w-4 h-4 text-orange-400" />
+            <span className="text-2xl font-bold text-[#bc4b09]">{metrics?.high || 0}</span>
+            <AlertTriangle className="w-4 h-4 text-[#bc4b09]" />
           </div>
         </div>
 
-        {/* Pending Triage */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
-          <span className="text-xs font-medium text-amber-300 block mb-1">Pending Action</span>
+        {/* Pending Action */}
+        <div className="bg-white border border-gray-200 p-4 rounded-fluent-md shadow-fluent-2">
+          <span className="text-xs font-medium text-[#8a6100] block mb-1">Pending Triage</span>
           <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-black text-amber-300">{metrics?.pending || 0}</span>
-            <Clock className="w-4 h-4 text-amber-400" />
+            <span className="text-2xl font-bold text-[#8a6100]">{metrics?.pending || 0}</span>
+            <Clock className="w-4 h-4 text-[#8a6100]" />
           </div>
         </div>
 
         {/* In Progress */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
-          <span className="text-xs font-medium text-blue-400 block mb-1">Field Dispatched</span>
+        <div className="bg-white border border-gray-200 p-4 rounded-fluent-md shadow-fluent-2">
+          <span className="text-xs font-medium text-[#0078d4] block mb-1">In Progress</span>
           <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-black text-blue-400">{metrics?.inProgress || 0}</span>
-            <Building2 className="w-4 h-4 text-blue-400" />
+            <span className="text-2xl font-bold text-[#0078d4]">{metrics?.inProgress || 0}</span>
+            <Building2 className="w-4 h-4 text-[#0078d4]" />
           </div>
         </div>
 
         {/* Resolved */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
-          <span className="text-xs font-medium text-emerald-400 block mb-1">Resolved</span>
+        <div className="bg-white border border-gray-200 p-4 rounded-fluent-md shadow-fluent-2">
+          <span className="text-xs font-medium text-[#107c41] block mb-1">Resolved</span>
           <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-black text-emerald-400">{metrics?.resolved || 0}</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span className="text-2xl font-bold text-[#107c41]">{metrics?.resolved || 0}</span>
+            <CheckCircle2 className="w-4 h-4 text-[#107c41]" />
           </div>
         </div>
 
       </div>
 
-      {/* Search & Multi-Filter Bar */}
-      <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-xl space-y-3">
+      {/* Filter and Search Toolbar */}
+      <div className="bg-white border border-gray-200 p-4 rounded-fluent-lg shadow-fluent-2 space-y-3">
         
         {/* Search input */}
         <div className="relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+          <Search className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by Ticket ID (TKT-1001), keywords, location, ward, or department..."
-            className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-100 placeholder-slate-500"
+            placeholder="Search by Ticket ID (e.g. TKT-1001), keywords, location, ward, or department..."
+            className="w-full bg-white border border-gray-300 focus:border-[#0078d4] focus:ring-1 focus:ring-[#0078d4] rounded-fluent-sm pl-9 pr-4 py-2 text-sm text-gray-900 placeholder-gray-400"
           />
         </div>
 
         {/* Dropdown Filters */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 pt-1 text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 text-xs">
           
           {/* Category */}
           <div>
-            <label className="text-slate-400 block mb-1 font-medium">Category</label>
+            <label className="text-gray-600 block mb-1 font-medium">Category</label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:border-blue-500"
+              className="w-full bg-white border border-gray-300 rounded p-1.5 text-gray-800 focus:border-[#0078d4]"
             >
               {categories.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
@@ -247,11 +247,11 @@ export default function OfficerDashboard({
 
           {/* Severity */}
           <div>
-            <label className="text-slate-400 block mb-1 font-medium">Severity Tier</label>
+            <label className="text-gray-600 block mb-1 font-medium">Severity Tier</label>
             <select
               value={selectedSeverity}
               onChange={(e) => setSelectedSeverity(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:border-blue-500"
+              className="w-full bg-white border border-gray-300 rounded p-1.5 text-gray-800 focus:border-[#0078d4]"
             >
               {severities.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
@@ -259,11 +259,11 @@ export default function OfficerDashboard({
 
           {/* Department */}
           <div>
-            <label className="text-slate-400 block mb-1 font-medium">Department</label>
+            <label className="text-gray-600 block mb-1 font-medium">Department</label>
             <select
               value={selectedDept}
               onChange={(e) => setSelectedDept(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:border-blue-500 truncate"
+              className="w-full bg-white border border-gray-300 rounded p-1.5 text-gray-800 focus:border-[#0078d4] truncate"
             >
               {departments.map(d => <option key={d} value={d}>{d}</option>)}
             </select>
@@ -271,24 +271,24 @@ export default function OfficerDashboard({
 
           {/* Ward */}
           <div>
-            <label className="text-slate-400 block mb-1 font-medium">Municipal Ward</label>
+            <label className="text-gray-600 block mb-1 font-medium">City Ward</label>
             <select
               value={selectedWard}
               onChange={(e) => setSelectedWard(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:border-blue-500 truncate"
+              className="w-full bg-white border border-gray-300 rounded p-1.5 text-gray-800 focus:border-[#0078d4] truncate"
             >
-              <option value="ALL">ALL Wards</option>
+              <option value="ALL">All Wards</option>
               {MUNICIPAL_WARDS.map(w => <option key={w} value={w}>{w}</option>)}
             </select>
           </div>
 
           {/* Status */}
           <div>
-            <label className="text-slate-400 block mb-1 font-medium">Status</label>
+            <label className="text-gray-600 block mb-1 font-medium">Status</label>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200 focus:border-blue-500"
+              className="w-full bg-white border border-gray-300 rounded p-1.5 text-gray-800 focus:border-[#0078d4]"
             >
               {statuses.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
@@ -297,11 +297,11 @@ export default function OfficerDashboard({
         </div>
 
         {/* Filter Summary & Count */}
-        <div className="flex items-center justify-between pt-2 text-xs text-slate-400 border-t border-slate-800/80">
+        <div className="flex items-center justify-between pt-2 text-xs text-gray-500 border-t border-gray-100">
           <div className="flex items-center space-x-2">
-            <span>Showing <strong className="text-white">{filteredTickets.length}</strong> of {tickets.length} tickets</span>
-            <span className="text-slate-600">•</span>
-            <span className="text-blue-400 font-mono">Sorted: CRITICAL → HIGH → MEDIUM → LOW (Oldest Unresolved First)</span>
+            <span>Showing <strong className="text-gray-900">{filteredTickets.length}</strong> of {tickets.length} tickets</span>
+            <span>•</span>
+            <span className="text-gray-600">Default Priority: Critical $\rightarrow$ High $\rightarrow$ Medium $\rightarrow$ Low (Oldest First)</span>
           </div>
           {(selectedCategory !== 'ALL' || selectedSeverity !== 'ALL' || selectedDept !== 'ALL' || selectedWard !== 'ALL' || selectedStatus !== 'ALL' || search) && (
             <button
@@ -313,7 +313,7 @@ export default function OfficerDashboard({
                 setSelectedWard('ALL');
                 setSelectedStatus('ALL');
               }}
-              className="text-xs text-blue-400 hover:text-blue-300 underline font-medium"
+              className="text-xs text-[#0078d4] hover:underline font-semibold"
             >
               Reset Filters
             </button>
@@ -322,50 +322,50 @@ export default function OfficerDashboard({
 
       </div>
 
-      {/* Priority Queue Ticket Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
+      {/* Fluent 2 Data Table */}
+      <div className="bg-white border border-gray-200 rounded-fluent-lg shadow-fluent-2 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-slate-300">
-            <thead className="bg-slate-950/80 text-xs uppercase font-semibold text-slate-400 border-b border-slate-800">
+          <table className="w-full text-left text-sm text-gray-700">
+            <thead className="bg-[#f9fafb] text-xs uppercase font-semibold text-gray-600 border-b border-gray-200">
               <tr>
-                <th className="px-4 py-3.5">Ticket & Category</th>
-                <th className="px-4 py-3.5">Priority & Severity</th>
-                <th className="px-4 py-3.5">Assigned Department</th>
-                <th className="px-4 py-3.5">Ward & Location</th>
-                <th className="px-4 py-3.5">Status</th>
-                <th className="px-4 py-3.5">Confidence</th>
-                <th className="px-4 py-3.5 text-right">Actions</th>
+                <th className="px-4 py-3">Ticket ID & Summary</th>
+                <th className="px-4 py-3">Priority Level</th>
+                <th className="px-4 py-3">Department</th>
+                <th className="px-4 py-3">Ward & Location</th>
+                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Confidence</th>
+                <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/80">
+            <tbody className="divide-y divide-gray-100">
               {filteredTickets.length > 0 ? (
                 filteredTickets.map((ticket) => (
                   <tr
                     key={ticket.id}
-                    className={`hover:bg-slate-800/40 transition-colors ${
+                    className={`hover:bg-[#f8fafc] transition-colors ${
                       ticket.severity === 'CRITICAL' && ticket.status !== 'Resolved'
-                        ? 'bg-red-500/5'
+                        ? 'bg-[#fff5f5]'
                         : ''
                     }`}
                   >
                     
-                    {/* Ticket & Category */}
-                    <td className="px-4 py-3.5">
+                    {/* Ticket & Summary */}
+                    <td className="px-4 py-3">
                       <div className="flex items-center space-x-2">
-                        <span className="font-mono font-bold text-white text-xs">{ticket.id}</span>
-                        <span className="text-[10px] px-2 py-0.5 bg-slate-800 border border-slate-700 text-slate-300 rounded font-medium">
+                        <span className="font-mono font-bold text-gray-900 text-xs">{ticket.id}</span>
+                        <span className="text-[10px] px-1.5 py-0.2 bg-gray-100 border border-gray-200 text-gray-700 rounded font-medium">
                           {ticket.category}
                         </span>
                         {ticket.duplicateGroupId && (
-                          <span className="text-[9px] px-1.5 py-0.2 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded">
-                            DUP
+                          <span className="text-[10px] px-1.5 py-0.2 bg-[#fff4ce] text-[#8a6100] border border-[#feec9e] rounded font-semibold">
+                            Clustered
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-slate-300 mt-1 line-clamp-1 font-medium">
+                      <p className="text-xs text-gray-800 mt-0.5 line-clamp-1 font-medium">
                         {ticket.summary}
                       </p>
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[11px] text-gray-400 font-mono">
                         {new Date(ticket.createdAt).toLocaleString([], {
                           month: 'short',
                           day: 'numeric',
@@ -375,74 +375,69 @@ export default function OfficerDashboard({
                       </span>
                     </td>
 
-                    {/* Priority & Severity */}
-                    <td className="px-4 py-3.5 whitespace-nowrap">
-                      <div className="space-y-1">
+                    {/* Severity */}
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="space-y-0.5">
                         <div>{getSeverityBadge(ticket.severity)}</div>
-                        <div className="flex items-center space-x-1.5 text-[11px] text-slate-400 font-mono">
-                          <span>Risk:</span>
-                          <span className="font-bold text-white">{ticket.priorityScore}/100</span>
+                        <div className="text-[11px] text-gray-500 font-mono">
+                          Score: <strong className="text-gray-800">{ticket.priorityScore}/100</strong>
                         </div>
                       </div>
                     </td>
 
-                    {/* Assigned Department */}
-                    <td className="px-4 py-3.5 text-xs text-slate-200">
+                    {/* Department */}
+                    <td className="px-4 py-3 text-xs text-gray-800">
                       <div className="flex items-center space-x-1.5">
-                        <Building2 className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
+                        <Building2 className="w-3.5 h-3.5 text-[#0078d4] flex-shrink-0" />
                         <span className="font-medium truncate max-w-[180px]">{ticket.department}</span>
                       </div>
                     </td>
 
                     {/* Ward & Location */}
-                    <td className="px-4 py-3.5 text-xs">
-                      <span className="text-white font-medium block truncate max-w-[180px]">
+                    <td className="px-4 py-3 text-xs">
+                      <span className="text-gray-900 font-medium block truncate max-w-[180px]">
                         {ticket.complaint?.ward}
                       </span>
-                      <span className="text-slate-400 text-[11px] block truncate max-w-[180px]">
+                      <span className="text-gray-500 text-[11px] block truncate max-w-[180px]">
                         {ticket.complaint?.location}
                       </span>
                     </td>
 
-                    {/* Status with quick changer */}
-                    <td className="px-4 py-3.5 whitespace-nowrap">
+                    {/* Status Changer */}
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <select
                         value={ticket.status}
                         onChange={(e) => onQuickUpdateStatus(ticket.id, e.target.value)}
-                        className={`text-xs font-semibold px-2 py-1 rounded-lg border focus:ring-1 focus:ring-blue-500 cursor-pointer ${
+                        className={`text-xs font-semibold px-2 py-1 rounded border focus:ring-1 focus:ring-[#0078d4] cursor-pointer ${
                           ticket.status === 'Pending'
-                            ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+                            ? 'bg-[#fff4ce] text-[#8a6100] border-[#feec9e]'
                             : ticket.status === 'In Progress'
-                            ? 'bg-blue-500/10 text-blue-400 border-blue-500/30'
-                            : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                            ? 'bg-[#eff6fc] text-[#0078d4] border-[#b4d6fa]'
+                            : 'bg-[#dff6dd] text-[#107c41] border-[#a8e5ab]'
                         }`}
                       >
-                        <option value="Pending" className="bg-slate-900 text-slate-200">Pending</option>
-                        <option value="In Progress" className="bg-slate-900 text-slate-200">In Progress</option>
-                        <option value="Resolved" className="bg-slate-900 text-slate-200">Resolved</option>
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
                       </select>
                     </td>
 
                     {/* AI Confidence */}
-                    <td className="px-4 py-3.5 whitespace-nowrap text-xs font-mono">
-                      <span className="text-emerald-400 font-bold">
+                    <td className="px-4 py-3 whitespace-nowrap text-xs font-mono text-gray-600">
+                      <span className="font-bold text-[#107c41]">
                         {Math.round((ticket.aiConfidence || 0.95) * 100)}%
                       </span>
-                      {ticket.manualReviewRequired && (
-                        <span className="ml-1.5 px-1 text-[10px] bg-amber-500/20 text-amber-300 rounded">
-                          Review
-                        </span>
-                      )}
                     </td>
 
-                    {/* Action button */}
-                    <td className="px-4 py-3.5 text-right whitespace-nowrap">
+                    {/* Inspect Action */}
+                    <td className="px-4 py-3 text-right whitespace-nowrap">
                       <button
+                        type="button"
                         onClick={() => onSelectTicket(ticket.id)}
-                        className="px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/30 rounded-lg text-xs font-semibold transition-all inline-flex items-center space-x-1"
+                        className="fluent-btn-secondary px-2.5 py-1 text-xs inline-flex items-center space-x-1"
                       >
                         <span>Inspect</span>
-                        <ExternalLink className="w-3 h-3" />
+                        <ExternalLink className="w-3 h-3 text-gray-500" />
                       </button>
                     </td>
 
@@ -450,8 +445,8 @@ export default function OfficerDashboard({
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7} className="px-4 py-12 text-center text-slate-500 text-sm">
-                    No complaints found matching the current search & filters.
+                  <td colSpan={7} className="px-4 py-12 text-center text-gray-500 text-sm">
+                    No tickets found matching the current search & filters.
                   </td>
                 </tr>
               )}

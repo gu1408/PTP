@@ -1,128 +1,127 @@
 import React from 'react';
-import { CopyCheck, ExternalLink, AlertTriangle, ShieldCheck, ArrowRight, MapPin } from 'lucide-react';
+import { CopyCheck, ExternalLink, ShieldCheck, MapPin, Info } from 'lucide-react';
 
 export default function DuplicateClustersView({ duplicateGroups = [], onSelectTicket }) {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       
+      {/* Title */}
       <div>
-        <div className="flex items-center space-x-2">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            Smart Duplicate Incident Clusters
-          </h1>
-          <span className="px-2 py-0.5 bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold rounded">
-            AI CLUSTERING
-          </span>
-        </div>
-        <p className="text-slate-400 text-sm mt-1">
-          CivicLens detects semantic and spatial overlap across citizen submissions to prevent duplicate field dispatches while keeping all records intact.
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#242424] tracking-tight">
+          Duplicate Incident Clusters
+        </h1>
+        <p className="text-gray-600 text-sm mt-1">
+          Automated grouping of multiple citizen reports describing the same physical incident to streamline field dispatch.
         </p>
       </div>
 
-      {/* Preservation Policy Banner */}
-      <div className="bg-blue-500/10 border border-blue-500/30 p-4 rounded-xl text-xs text-blue-300 flex items-start space-x-3">
-        <ShieldCheck className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+      {/* Municipal Preservation Policy Callout */}
+      <div className="bg-[#eff6fc] border border-[#b4d6fa] p-4 rounded-fluent-md text-xs text-[#005a9e] flex items-start space-x-3">
+        <Info className="w-5 h-5 text-[#0078d4] flex-shrink-0 mt-0.5" />
         <div>
-          <span className="font-bold block text-white text-sm mb-0.5">Municipal Preservation Policy</span>
-          <p className="text-blue-200/90 leading-relaxed">
-            Duplicate detection groups related citizen reports under a single master operational ticket for field crews. In accordance with civic transparency standards, duplicate submissions are <strong>never silently deleted or discarded</strong>.
+          <span className="font-bold block text-gray-900 text-sm mb-0.5">Municipal Non-Destructive Grouping Policy</span>
+          <p className="text-gray-700 leading-relaxed">
+            Duplicate detection clusters related reports under a single master operational work order. In compliance with municipal transparency standards, duplicate submissions are <strong>never silently deleted or discarded</strong>. Every citizen ticket retains an active tracking record.
           </p>
         </div>
       </div>
 
       {/* Clusters List */}
       {duplicateGroups && duplicateGroups.length > 0 ? (
-        <div className="space-y-6">
+        <div className="space-y-5">
           {duplicateGroups.map((group) => (
-            <div key={group.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
+            <div key={group.id} className="bg-white border border-gray-200 rounded-fluent-lg p-5 shadow-fluent-2 space-y-4">
               
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-800">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-gray-200">
                 <div className="flex items-center space-x-2">
-                  <CopyCheck className="w-5 h-5 text-amber-400" />
-                  <span className="font-mono font-bold text-white text-sm">Incident Group: {group.id}</span>
+                  <CopyCheck className="w-5 h-5 text-[#8a6100]" />
+                  <span className="font-mono font-bold text-gray-900 text-sm">Cluster Group: {group.id}</span>
                 </div>
                 <div className="flex items-center space-x-3 text-xs">
-                  <span className="text-slate-400">
-                    Composite Match Score: <strong className="text-amber-300 font-mono">{Math.round((group.similarityScore || 0.8) * 100)}%</strong>
+                  <span className="text-gray-600">
+                    Composite Match: <strong className="text-[#8a6100] font-bold bg-[#fff4ce] px-2 py-0.5 rounded border border-[#feec9e]">{Math.round((group.similarityScore || 0.8) * 100)}%</strong>
                   </span>
-                  <span className="text-slate-500">•</span>
-                  <span className="text-slate-400 font-mono">
+                  <span className="text-gray-300">•</span>
+                  <span className="text-gray-500 font-mono">
                     {new Date(group.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
               </div>
 
-              {/* Duplicate Reason */}
-              <div className="p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl text-xs text-amber-200">
-                <strong>Clustering Justification:</strong> {group.detectedReason || 'High semantic text overlap within the same municipal ward.'}
+              {/* Duplicate Reason Explanation */}
+              <div className="p-3 bg-[#fafafa] border border-gray-200 rounded text-xs text-gray-800 leading-relaxed">
+                <strong className="text-gray-900">Grouping Rationale:</strong> {group.detectedReason || 'High semantic text overlap within the same municipal ward.'}
               </div>
 
-              {/* Primary Ticket vs Related Tickets */}
+              {/* Primary Master Ticket vs Related Tickets */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
                 {/* Primary Master Ticket */}
-                <div className="bg-slate-950 p-4 rounded-xl border border-blue-500/30">
+                <div className="bg-[#eff6fc]/30 border-l-4 border-l-[#0078d4] border-y border-r border-gray-200 p-4 rounded-fluent-md">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-blue-400">
-                      Primary Master Ticket
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#0078d4]">
+                      Master Complaint (Lead Dispatch)
                     </span>
-                    <span className="px-2 py-0.5 bg-blue-500/10 border border-blue-500/30 text-blue-400 rounded text-[10px] font-mono">
-                      Lead Dispatch
+                    <span className="px-2 py-0.5 bg-[#eff6fc] border border-[#b4d6fa] text-[#0078d4] rounded text-[10px] font-semibold">
+                      Primary Work Order
                     </span>
                   </div>
 
                   {group.primaryTicket ? (
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="font-mono font-bold text-white text-sm">{group.primaryTicket.id}</span>
-                        <span className="text-xs text-slate-400">{group.primaryTicket.category}</span>
+                        <span className="font-mono font-bold text-gray-900 text-sm">{group.primaryTicket.id}</span>
+                        <span className="text-xs text-gray-600">{group.primaryTicket.category}</span>
                       </div>
-                      <p className="text-xs text-slate-200 mt-1 font-medium line-clamp-2">
+                      <p className="text-xs text-gray-800 mt-1 font-medium line-clamp-2">
                         {group.primaryTicket.summary}
                       </p>
-                      <div className="mt-3 flex items-center justify-between text-xs pt-2 border-t border-slate-800">
-                        <span className="text-slate-400">{group.primaryTicket.department}</span>
+                      <div className="mt-3 flex items-center justify-between text-xs pt-2 border-t border-gray-200">
+                        <span className="text-gray-600">{group.primaryTicket.department}</span>
                         <button
+                          type="button"
                           onClick={() => onSelectTicket(group.primaryTicket.id)}
-                          className="text-blue-400 hover:text-blue-300 font-semibold inline-flex items-center space-x-1"
+                          className="fluent-btn-secondary px-2.5 py-1 text-xs inline-flex items-center space-x-1"
                         >
-                          <span>Inspect</span>
-                          <ExternalLink className="w-3 h-3" />
+                          <span>Inspect Master</span>
+                          <ExternalLink className="w-3 h-3 text-gray-500" />
                         </button>
                       </div>
                     </div>
                   ) : (
-                    <span className="text-xs text-slate-500 font-mono">{group.primaryTicketId}</span>
+                    <span className="text-xs text-gray-500 font-mono">{group.primaryTicketId}</span>
                   )}
                 </div>
 
                 {/* Related Submissions */}
-                <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                <div className="bg-white p-4 rounded-fluent-md border border-gray-200">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    <span className="text-xs font-bold uppercase tracking-wider text-gray-600">
                       Related Citizen Reports ({group.relatedTicketIds?.length || 0})
                     </span>
-                    <span className="text-[10px] text-slate-500">Grouped for Context</span>
+                    <span className="text-[10px] text-gray-500">Clustered Submissions</span>
                   </div>
 
                   <div className="space-y-2 max-h-36 overflow-y-auto">
                     {group.relatedTickets && group.relatedTickets.length > 0 ? (
                       group.relatedTickets.map((t) => (
-                        <div key={t.id} className="p-2 bg-slate-900 rounded-lg border border-slate-800 text-xs flex items-center justify-between">
+                        <div key={t.id} className="p-2.5 bg-[#fafafa] rounded border border-gray-200 text-xs flex items-center justify-between">
                           <div>
-                            <span className="font-mono font-bold text-white">{t.id}</span>
-                            <p className="text-slate-400 text-[11px] truncate max-w-[200px]">{t.summary}</p>
+                            <span className="font-mono font-bold text-gray-900">{t.id}</span>
+                            <p className="text-gray-600 text-[11px] truncate max-w-[200px]">{t.summary}</p>
                           </div>
                           <button
+                            type="button"
                             onClick={() => onSelectTicket(t.id)}
-                            className="p-1 text-slate-400 hover:text-white"
+                            className="p-1 text-gray-500 hover:text-gray-900"
+                            title="Inspect related ticket"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </button>
                         </div>
                       ))
                     ) : (
-                      <div className="text-xs text-slate-500">
+                      <div className="text-xs text-gray-500">
                         Related Tickets: {group.relatedTicketIds?.join(', ')}
                       </div>
                     )}
@@ -135,11 +134,11 @@ export default function DuplicateClustersView({ duplicateGroups = [], onSelectTi
           ))}
         </div>
       ) : (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center text-slate-500">
-          <CopyCheck className="w-12 h-12 mx-auto mb-3 opacity-30" />
-          <h3 className="text-base font-bold text-white mb-1">No Duplicate Incidents Currently Detected</h3>
-          <p className="text-xs max-w-md mx-auto">
-            When multiple citizens submit complaints regarding the same incident (e.g. identical pothole or fallen tree within the same ward), CivicLens AI automatically groups them here.
+        <div className="bg-white border border-gray-200 rounded-fluent-lg p-12 text-center text-gray-500 shadow-fluent-2">
+          <CopyCheck className="w-10 h-10 mx-auto mb-2 opacity-30 text-gray-400" />
+          <h3 className="text-base font-bold text-gray-900 mb-1">No Duplicate Incidents Currently Detected</h3>
+          <p className="text-xs text-gray-600 max-w-md mx-auto leading-relaxed">
+            When multiple citizens submit reports regarding the same localized issue (such as identical road craters or tree blockages), CivicLens automatically clusters them here.
           </p>
         </div>
       )}
