@@ -337,7 +337,11 @@ class CivicDB {
   }
 
   getTicketById(ticketId) {
-    const ticket = this.data.tickets.find(t => t.id === ticketId || t.complaintId === ticketId);
+    const normalizedId = (ticketId || '').trim().toUpperCase();
+    const ticket = this.data.tickets.find(t =>
+      t.id.toUpperCase() === normalizedId ||
+      t.complaintId.toUpperCase() === normalizedId
+    );
     if (!ticket) return null;
 
     const complaint = this.data.complaints.find(c => c.id === ticket.complaintId) || {};

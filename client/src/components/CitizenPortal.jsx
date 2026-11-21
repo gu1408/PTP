@@ -161,8 +161,8 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
 
   // Lookup Ticket in Tracker
   const handleTrackTicket = async (idToSearch) => {
-    const id = idToSearch || searchTicketId;
-    if (!id || !id.trim()) {
+    const id = (idToSearch || searchTicketId || '').trim().toUpperCase();
+    if (!id) {
       setTrackerError('Please enter your Complaint ID or Ticket ID.');
       return;
     }
@@ -590,7 +590,7 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
               <input
                 type="text"
                 value={searchTicketId}
-                onChange={(e) => setSearchTicketId(e.target.value)}
+                onChange={(e) => setSearchTicketId(e.target.value.toUpperCase())}
                 placeholder="Enter CMP-xxxx or TKT-xxxx"
                 className="flex-1 bg-white border border-gray-300 focus:border-[#0078d4] focus:ring-1 focus:ring-[#0078d4] rounded-fluent-sm px-3.5 py-2 text-sm text-gray-900 uppercase font-mono"
               />
