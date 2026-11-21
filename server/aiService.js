@@ -256,16 +256,56 @@ export function classifyLocally(text, location = '') {
     confidence: Number(confidence.toFixed(2)),
     priority_score: priorityScore,
     manual_review_required: manualReviewRequired,
-    model_used: 'CivicLens Intelligent Multi-Lingual Engine (Deterministic)'
+    model_used: 'CivicLens Rule & Semantic NLP Engine (Local Fallback)'
+  };
+}
+
+/**
+ * Check active AI engine status
+ */
+export async function getAiEngineStatus() {
+  const geminiKey = process.env.GEMINI_API_KEY;
+  if (!geminiKey) {
+    return {
+      isCloudAiConfigured: false,
+      activeEngine: 'CivicLens Rule & Semantic NLP Engine (Local Fallback)',
+      status: 'local_fallback',
+      statusLabel: 'Local Fallback Active (Deterministic NLP)'
+    };
+  }
+
+  // Probe Gemini API connection
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${geminiKey}`, {
+      method: 'GET'
+    });
+    if (res.ok) {
+      return {
+        isCloudAiConfigured: true,
+        activeEngine: 'Google Gemini 1.5 Flash (Cloud API)',
+        status: 'cloud_active',
+        statusLabel: 'Gemini Cloud AI Active'
+      };
+    }
+  } catch (err) {
+    console.warn('[AI Service] Gemini probe error:', err.message);
+  }
+
+  return {
+    isCloudAiConfigured: false,
+    activeEngine: 'CivicLens Rule & Semantic NLP Engine (Local Fallback)',
+    status: 'local_fallback',
+    statusLabel: 'Local Fallback Active (API Unavailable)'
   };
 }
 
 /**
  * Main AI Processing Entry Point:
- * Tries Gemini API if key is available in process.env or provided; falls back gracefully.
+ * Tries Gemini API if key is available on backend; falls back gracefully.
+ * Never expects or leaks client-side API keys.
  */
-export async function processComplaintWithAI(text, photoUrl = null, location = '', apiKey = null) {
-  const geminiKey = apiKey || process.env.GEMINI_API_KEY;
+export async function processComplaintWithAI(text, photoUrl = null, location = '') {
+  const geminiKey = process.env.GEMINI_API_KEY;
 
   if (!geminiKey) {
     // Return resilient built-in classification immediately
@@ -277,7 +317,7 @@ export async function processComplaintWithAI(text, photoUrl = null, location = '
 Analyze the following citizen complaint and return ONLY a valid JSON object.
 Text: "${text}"
 Location: "${location}"
-Has Photo: ${photoUrl ? 'Yes' : 'No'}
+Has Photo Evidence: ${photoUrl ? 'Yes' : 'No'}
 
 Requirements:
 1. "category": Must be strictly one of ["Roads", "Waste", "Water", "Electricity", "Trees", "Drainage"].
@@ -314,12 +354,26 @@ Return ONLY raw JSON, with no markdown fences, matching:
   "priority_score": 96
 }`;
 
-    // Make direct HTTP call to Gemini API
+    const parts = [{ text: prompt }];
+
+    // If a base64 photo is provided, attach it as an inline part for real multimodal verification
+    if (photoUrl && photoUrl.startsWith('data:image/')) {
+      const match = photoUrl.match(/^data:(image\/[a-zA-Z+]+);base64,(.+)$/);
+      if (match) {
+        parts.push({
+          inlineData: {
+            mimeType: match[1],
+            data: match[2]
+          }
+        });
+      }
+    }
+
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
+        contents: [{ parts }],
         generationConfig: {
           temperature: 0.1,
           responseMimeType: "application/json"

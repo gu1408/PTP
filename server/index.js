@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { db } from './db.js';
-import { processComplaintWithAI, classifyLocally } from './aiService.js';
+import { processComplaintWithAI, classifyLocally, getAiEngineStatus } from './aiService.js';
 import { detectDuplicate } from './duplicateService.js';
 
 dotenv.config();
@@ -33,13 +33,51 @@ app.use((req, res, next) => {
 });
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/api/health', async (req, res) => {
+  const aiStatus = await getAiEngineStatus();
   res.json({
     status: 'healthy',
     service: 'CivicLens AI Triage Engine',
     timestamp: new Date().toISOString(),
-    geminiKeyConfigured: !!process.env.GEMINI_API_KEY
+    aiEngine: aiStatus
   });
+});
+
+// GET /api/ai/status - Truthful AI engine status
+app.get('/api/ai/status', async (req, res) => {
+  try {
+    const status = await getAiEngineStatus();
+    res.json({ success: true, ...status });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      isCloudAiConfigured: false,
+      activeEngine: 'CivicLens Rule & Semantic NLP Engine (Local Fallback)',
+      status: 'local_fallback',
+      statusLabel: 'Local Fallback Active (Deterministic NLP)'
+    });
+  }
+});
+
+// POST /api/ai/config - Set or test Gemini API key strictly on the backend
+app.post('/api/ai/config', async (req, res) => {
+  try {
+    const { apiKey } = req.body;
+    if (apiKey && typeof apiKey === 'string' && apiKey.trim().length > 10) {
+      process.env.GEMINI_API_KEY = apiKey.trim();
+    } else if (apiKey === null || apiKey === '') {
+      delete process.env.GEMINI_API_KEY;
+    }
+
+    const aiStatus = await getAiEngineStatus();
+    res.json({
+      success: true,
+      message: aiStatus.isCloudAiConfigured ? 'Gemini Cloud AI configured successfully.' : 'Operating in local fallback mode.',
+      ...aiStatus
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Failed to update backend AI configuration.' });
+  }
 });
 
 // GET /api/tickets - Priority sorted tickets with filters
@@ -75,11 +113,11 @@ app.get('/api/tickets/:id', (req, res) => {
 // POST /api/ai/preview - Instant AI analysis preview without saving
 app.post('/api/ai/preview', async (req, res) => {
   try {
-    const { text, location = '', apiKey } = req.body;
+    const { text, location = '' } = req.body;
     if (!text || !text.trim()) {
       return res.status(400).json({ success: false, error: 'Complaint text is required.' });
     }
-    const aiResult = await processComplaintWithAI(text.trim(), null, location, apiKey);
+    const aiResult = await processComplaintWithAI(text.trim(), null, location);
     res.json({ success: true, aiResult });
   } catch (err) {
     console.error('AI preview error:', err);
@@ -90,7 +128,7 @@ app.post('/api/ai/preview', async (req, res) => {
 // POST /api/complaints - Citizen submits complaint
 app.post('/api/complaints', async (req, res) => {
   try {
-    const { originalText, language, photoUrl, location, ward, apiKey } = req.body;
+    const { originalText, language, photoUrl, location, ward } = req.body;
 
     if (!originalText || !originalText.trim()) {
       return res.status(400).json({
@@ -106,12 +144,42 @@ app.post('/api/complaints', async (req, res) => {
       });
     }
 
+    // Photo validation (file type and size limit)
+    if (photoUrl) {
+      if (typeof photoUrl !== 'string') {
+        return res.status(400).json({ success: false, error: 'Invalid photo format.' });
+      }
+
+      // Check size limit (approx 7MB base64 string = 5MB raw image)
+      if (photoUrl.length > 7 * 1024 * 1024) {
+        return res.status(400).json({
+          success: false,
+          error: 'Image file size exceeds maximum limit of 5MB.'
+        });
+      }
+
+      // If data URI, validate allowed image MIME types
+      if (photoUrl.startsWith('data:')) {
+        const isAllowedImage = /^data:image\/(jpeg|png|webp|gif|jpg);base64,/i.test(photoUrl);
+        if (!isAllowedImage) {
+          return res.status(400).json({
+            success: false,
+            error: 'Unsupported image format. Allowed formats: JPEG, PNG, WEBP, GIF.'
+          });
+        }
+      } else if (!/^https?:\/\//i.test(photoUrl)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid photo URL scheme. Must be HTTP/HTTPS or image Data URI.'
+        });
+      }
+    }
+
     // 1. Run AI analysis
     const aiResult = await processComplaintWithAI(
       originalText.trim(),
       photoUrl,
-      location || '',
-      apiKey
+      location || ''
     );
 
     // 2. Check for duplicate complaints among active tickets

@@ -43,7 +43,7 @@ export default function DuplicateClustersView({ duplicateGroups = [], onSelectTi
                 </div>
                 <div className="flex items-center space-x-3 text-xs">
                   <span className="text-slate-400">
-                    Similarity Score: <strong className="text-amber-300 font-mono">{Math.round((group.similarityScore || 0.8) * 100)}%</strong>
+                    Composite Match Score: <strong className="text-amber-300 font-mono">{Math.round((group.similarityScore || 0.8) * 100)}%</strong>
                   </span>
                   <span className="text-slate-500">•</span>
                   <span className="text-slate-400 font-mono">

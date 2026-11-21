@@ -1,7 +1,9 @@
 import React from 'react';
 import { ShieldAlert, Users, LayoutDashboard, BarChart3, CopyCheck, Sliders, Sparkles } from 'lucide-react';
 
-export default function Navbar({ activeTab, setActiveTab, metrics, openSettings }) {
+export default function Navbar({ activeTab, setActiveTab, metrics, openSettings, aiStatus }) {
+  const isCloudOnline = aiStatus?.status === 'cloud_active';
+
   return (
     <header className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -82,14 +84,24 @@ export default function Navbar({ activeTab, setActiveTab, metrics, openSettings 
             </button>
           </nav>
 
-          {/* Right Actions: AI status indicator & Settings */}
+          {/* Right Actions: Truthful AI status indicator & Settings */}
           <div className="flex items-center space-x-2">
-            <div className="hidden sm:flex items-center space-x-2 px-3 py-1.5 bg-slate-800/80 border border-slate-700/60 rounded-lg text-xs text-slate-300">
+            <div className={`hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs ${
+              isCloudOnline
+                ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
+                : 'bg-amber-500/10 border border-amber-500/30 text-amber-300'
+            }`}>
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                {isCloudOnline && (
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                )}
+                <span className={`relative inline-flex rounded-full h-2 w-2 ${
+                  isCloudOnline ? 'bg-emerald-500' : 'bg-amber-400'
+                }`}></span>
               </span>
-              <span className="font-mono text-emerald-400">AI Engine Online</span>
+              <span className="font-mono text-[11px] font-semibold">
+                {aiStatus?.statusLabel || (isCloudOnline ? 'Gemini Cloud AI Active' : 'Local Fallback Active (Deterministic NLP)')}
+              </span>
             </div>
 
             <button

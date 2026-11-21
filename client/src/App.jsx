@@ -15,6 +15,7 @@ export default function App() {
   const [selectedTicketId, setSelectedTicketId] = useState(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [initialTrackId, setInitialTrackId] = useState('');
+  const [aiStatus, setAiStatus] = useState(null);
 
   // Initial data load
   useEffect(() => {
@@ -42,6 +43,13 @@ export default function App() {
       const dataDuplicates = await resDuplicates.json();
       if (dataDuplicates.success) {
         setDuplicateGroups(dataDuplicates.duplicateGroups);
+      }
+
+      // 4. Fetch AI Engine Status
+      const resAi = await fetch('/api/ai/status');
+      const dataAi = await resAi.json();
+      if (dataAi.success) {
+        setAiStatus(dataAi);
       }
     } catch (err) {
       console.error('Error loading CivicLens data:', err);
@@ -84,6 +92,7 @@ export default function App() {
         setActiveTab={setActiveTab}
         metrics={analytics?.metrics}
         openSettings={() => setIsSettingsOpen(true)}
+        aiStatus={aiStatus}
       />
 
       {/* Main Content Area */}
@@ -138,6 +147,8 @@ export default function App() {
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
         onResetData={() => fetchAllData()}
+        onAiConfigChanged={() => fetchAllData()}
+        aiStatus={aiStatus}
       />
 
       {/* Footer */}

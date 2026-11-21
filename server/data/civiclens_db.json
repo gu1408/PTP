@@ -1,6 +1,33 @@
 {
   "complaints": [
     {
+      "id": "CMP-8811",
+      "originalText": "Pothole on 2nd cross with attached photograph evidence",
+      "language": "English",
+      "photoUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+      "location": "2nd Cross Indiranagar",
+      "ward": "Ward 08 - Indiranagar",
+      "submittedAt": "2026-11-21T06:14:38.171Z"
+    },
+    {
+      "id": "CMP-8810",
+      "originalText": "Deep open crater in the asphalt near Malleshwaram bus stop, scooter rider injured.",
+      "language": "English",
+      "photoUrl": null,
+      "location": "Malleshwaram Bus Stop",
+      "ward": "Ward 12 - Malleshwaram",
+      "submittedAt": "2026-11-21T06:14:38.107Z"
+    },
+    {
+      "id": "CMP-8809",
+      "originalText": "no road hump for the road near collage area",
+      "language": "English",
+      "photoUrl": null,
+      "location": "near acharya collage",
+      "ward": "Ward 01 - General Central",
+      "submittedAt": "2026-11-21T05:53:19.826Z"
+    },
+    {
       "id": "CMP-8808",
       "originalText": "Sparking live wire hanging low outside school gate on 4th cross, children walking nearby.",
       "language": "English",
@@ -75,6 +102,57 @@
   ],
   "tickets": [
     {
+      "id": "TKT-1011",
+      "complaintId": "CMP-8811",
+      "category": "Roads",
+      "severity": "MEDIUM",
+      "reason": "Standard municipal maintenance issue affecting community convenience without immediate peril.",
+      "department": "Road Maintenance Department",
+      "priorityScore": 45,
+      "status": "Pending",
+      "aiConfidence": 0.78,
+      "manualReviewRequired": false,
+      "summary": "Pothole on 2nd cross with attached photograph evidence",
+      "createdAt": "2026-11-21T06:14:38.171Z",
+      "updatedAt": "2026-11-21T06:14:38.171Z",
+      "officerNotes": "",
+      "duplicateGroupId": null
+    },
+    {
+      "id": "TKT-1010",
+      "complaintId": "CMP-8810",
+      "category": "Roads",
+      "severity": "MEDIUM",
+      "reason": "Standard municipal maintenance issue affecting community convenience without immediate peril.",
+      "department": "Road Maintenance Department",
+      "priorityScore": 51,
+      "status": "In Progress",
+      "aiConfidence": 0.97,
+      "manualReviewRequired": false,
+      "summary": "Deep open crater in the asphalt near Malleshwaram bus stop,",
+      "createdAt": "2026-11-21T06:14:38.107Z",
+      "updatedAt": "2026-11-21T06:14:38.142Z",
+      "officerNotes": "Asphalt cold-mix patching truck dispatched to Malleshwaram.",
+      "duplicateGroupId": null
+    },
+    {
+      "id": "TKT-1009",
+      "complaintId": "CMP-8809",
+      "category": "Roads",
+      "severity": "MEDIUM",
+      "reason": "Standard municipal maintenance issue affecting community convenience without immediate peril.",
+      "department": "Road Maintenance Department",
+      "priorityScore": 45,
+      "status": "Pending",
+      "aiConfidence": 0.78,
+      "manualReviewRequired": false,
+      "summary": "no road hump for the road near collage area",
+      "createdAt": "2026-11-21T05:53:19.826Z",
+      "updatedAt": "2026-11-21T05:53:19.826Z",
+      "officerNotes": "",
+      "duplicateGroupId": null
+    },
+    {
       "id": "TKT-1008",
       "complaintId": "CMP-8808",
       "category": "Electricity",
@@ -121,7 +199,7 @@
       "manualReviewRequired": false,
       "summary": "Severe road crater causing commuter accidents on 100ft road",
       "createdAt": "2026-11-21T00:05:52.023Z",
-      "updatedAt": "2026-11-21T00:05:52.023Z",
+      "updatedAt": "2026-11-21T05:49:10.788Z",
       "officerNotes": "",
       "duplicateGroupId": null
     },
@@ -256,6 +334,66 @@
     }
   ],
   "activityLogs": [
+    {
+      "id": "LOG-1795241678171",
+      "ticketId": "TKT-1011",
+      "action": "SUBMITTED",
+      "previousStatus": null,
+      "newStatus": "Pending",
+      "timestamp": "2026-11-21T06:14:38.171Z",
+      "performedBy": "Citizen",
+      "details": "Citizen submitted complaint via portal. AI assigned Roads with MEDIUM severity."
+    },
+    {
+      "id": "LOG-1795241678142",
+      "ticketId": "TKT-1010",
+      "action": "UPDATED",
+      "previousStatus": "Pending",
+      "newStatus": "In Progress",
+      "timestamp": "2026-11-21T06:14:38.142Z",
+      "performedBy": "Municipal Officer",
+      "details": "Status changed to In Progress (Notes: Asphalt cold-mix patching truck dispatched to Malleshwaram.)"
+    },
+    {
+      "id": "LOG-1795241678107",
+      "ticketId": "TKT-1010",
+      "action": "SUBMITTED",
+      "previousStatus": null,
+      "newStatus": "Pending",
+      "timestamp": "2026-11-21T06:14:38.107Z",
+      "performedBy": "Citizen",
+      "details": "Citizen submitted complaint via portal. AI assigned Roads with MEDIUM severity."
+    },
+    {
+      "id": "LOG-1795240399826",
+      "ticketId": "TKT-1009",
+      "action": "SUBMITTED",
+      "previousStatus": null,
+      "newStatus": "Pending",
+      "timestamp": "2026-11-21T05:53:19.826Z",
+      "performedBy": "Citizen",
+      "details": "Citizen submitted complaint via portal. AI assigned Roads with MEDIUM severity."
+    },
+    {
+      "id": "LOG-1795240150788",
+      "ticketId": "TKT-1002",
+      "action": "UPDATED",
+      "previousStatus": "Pending",
+      "newStatus": "In Progress",
+      "timestamp": "2026-11-21T05:49:10.788Z",
+      "performedBy": "Officer Quick Dispatch",
+      "details": "Status changed to In Progress"
+    },
+    {
+      "id": "LOG-1795240148153",
+      "ticketId": "TKT-1002",
+      "action": "UPDATED",
+      "previousStatus": "In Progress",
+      "newStatus": "Pending",
+      "timestamp": "2026-11-21T05:49:08.153Z",
+      "performedBy": "Officer Quick Dispatch",
+      "details": "Status changed to Pending"
+    },
     {
       "id": "LOG-1795239096064",
       "ticketId": "TKT-1008",

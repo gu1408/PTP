@@ -64,11 +64,10 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
     const timer = setTimeout(async () => {
       try {
         setIsPreviewLoading(true);
-        const apiKey = localStorage.getItem('civiclens_gemini_key') || '';
         const res = await fetch('/api/ai/preview', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text, location, apiKey })
+          body: JSON.stringify({ text, location })
         });
         const data = await res.json();
         if (data.success) {
@@ -93,13 +92,21 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
     setErrorMsg('');
   };
 
-  // Handle Photo File Upload (Convert to base64 for reliable display & storage)
+  // Handle Photo File Upload (Convert to base64 with strict type & size validation)
   const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    // Validate MIME types
+    const validMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg', 'image/gif'];
+    if (!validMimes.includes(file.type)) {
+      setErrorMsg('Invalid file format. Please upload an image file (JPEG, PNG, WEBP, GIF).');
+      return;
+    }
+
+    // Validate size limit (5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setErrorMsg('Image file size must be under 5MB.');
+      setErrorMsg('Image file size exceeds maximum limit of 5MB. Please upload a smaller image.');
       return;
     }
 
@@ -107,6 +114,9 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
     reader.onloadend = () => {
       setPhotoUrl(reader.result);
       setErrorMsg('');
+    };
+    reader.onerror = () => {
+      setErrorMsg('Failed to read image file. Please try another photograph.');
     };
     reader.readAsDataURL(file);
   };
@@ -123,7 +133,6 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
     setErrorMsg('');
 
     try {
-      const apiKey = localStorage.getItem('civiclens_gemini_key') || '';
       const response = await fetch('/api/complaints', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -132,8 +141,7 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
           language: detectedLang,
           photoUrl: photoUrl || null,
           location: location || 'Specified Ward Area',
-          ward,
-          apiKey
+          ward
         })
       });
 
@@ -277,12 +285,17 @@ export default function CitizenPortal({ onComplaintSubmitted, onTrackTicketId, i
 
                 {submissionResult.duplicateInfo?.isDuplicate && (
                   <div className="bg-amber-500/10 border border-amber-500/30 p-3.5 rounded-lg text-xs text-amber-300">
-                    <div className="flex items-center space-x-1.5 font-bold mb-1">
-                      <AlertTriangle className="w-4 h-4" />
-                      <span>Probable Duplicate Incident Grouped</span>
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center space-x-1.5 font-bold">
+                        <AlertTriangle className="w-4 h-4" />
+                        <span>Probable Duplicate Incident Grouped</span>
+                      </div>
+                      <span className="font-mono font-bold text-xs bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/40">
+                        {Math.round((submissionResult.duplicateInfo.similarityScore || 0.8) * 100)}% Match
+                      </span>
                     </div>
-                    <p className="text-amber-200/90">
-                      This incident matches active ticket <span className="font-mono font-bold">{submissionResult.duplicateInfo.matchedTicketId}</span>. It has been grouped for officer review without being discarded.
+                    <p className="text-amber-200/90 leading-relaxed">
+                      {submissionResult.duplicateInfo.reason || `Matches active ticket ${submissionResult.duplicateInfo.matchedTicketId}. Grouped for officer review without being discarded.`}
                     </p>
                   </div>
                 )}
