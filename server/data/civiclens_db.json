@@ -1,0 +1,350 @@
+{
+  "complaints": [
+    {
+      "id": "CMP-8808",
+      "originalText": "Sparking live wire hanging low outside school gate on 4th cross, children walking nearby.",
+      "language": "English",
+      "photoUrl": null,
+      "location": "4th Cross Malleshwaram",
+      "ward": "Ward 12 - Malleshwaram",
+      "submittedAt": "2026-11-21T05:31:19.092Z"
+    },
+    {
+      "id": "CMP-8801",
+      "originalText": "There is an exposed live electric wire hanging near the primary school gate on 4th cross. Sparks were seen this morning when it rained.",
+      "language": "English",
+      "photoUrl": "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80",
+      "location": "4th Cross, Near St. Joseph School",
+      "ward": "Ward 12 - Malleshwaram",
+      "submittedAt": "2026-11-21T02:25:52.021Z"
+    },
+    {
+      "id": "CMP-8802",
+      "originalText": "Large dangerous pothole right in the middle of 100 Feet Road. Two two-wheelers skidded and fell yesterday night.",
+      "language": "English",
+      "photoUrl": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80",
+      "location": "100 Feet Road, Near Metro Pillar 42",
+      "ward": "Ward 08 - Indiranagar",
+      "submittedAt": "2026-11-21T00:05:52.023Z"
+    },
+    {
+      "id": "CMP-8803",
+      "originalText": "ಕಳೆದ ಮೂರು ದಿನಗಳಿಂದ ತರಕಾರಿ ಮಾರುಕಟ್ಟೆಯ ಬಳಿ ಕಸದ ರಾಶಿ ಬಿದ್ದಿದೆ ಮತ್ತು ದುರ್ವಾಸನೆ ಬೀರುತ್ತಿದೆ. ನೊಣಗಳ ಕಾಟ ಹೆಚ್ಚಾಗಿದೆ.",
+      "language": "Kannada",
+      "photoUrl": "https://images.unsplash.com/photo-1605600659873-d808a13e4d2a?auto=format&fit=crop&w=600&q=80",
+      "location": "Gandhi Bazaar Market Road",
+      "ward": "Ward 04 - Basavanagudi",
+      "submittedAt": "2026-11-20T22:25:52.023Z"
+    },
+    {
+      "id": "CMP-8804",
+      "originalText": "Main drinking water pipeline has ruptured on 7th Main. Potable water is flooding the street for the past 6 hours.",
+      "language": "English",
+      "photoUrl": "https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=600&q=80",
+      "location": "7th Main, 3rd Block",
+      "ward": "Ward 15 - Koramangala",
+      "submittedAt": "2026-11-20T20:25:52.023Z"
+    },
+    {
+      "id": "CMP-8805",
+      "originalText": "Heavy storm brought down a massive gulmohar tree branch completely blocking vehicle movement towards the government hospital.",
+      "language": "English",
+      "photoUrl": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=600&q=80",
+      "location": "Hospital Road, Opposite Bus Stop",
+      "ward": "Ward 02 - Jayanagar",
+      "submittedAt": "2026-11-20T18:05:52.023Z"
+    },
+    {
+      "id": "CMP-8806",
+      "originalText": "Stormwater drain is completely choked with plastic and silt. Rainwater entered 3 basement garages.",
+      "language": "English",
+      "photoUrl": "https://images.unsplash.com/photo-1517646287270-a5a9ca602e5c?auto=format&fit=crop&w=600&q=80",
+      "location": "Silver Springs Layout, 2nd Cross",
+      "ward": "Ward 20 - Whitefield",
+      "submittedAt": "2026-11-20T15:45:52.023Z"
+    },
+    {
+      "id": "CMP-8807",
+      "originalText": "Single LED street light blinking intermittently outside house #45. Night visibility is slightly reduced.",
+      "language": "English",
+      "photoUrl": null,
+      "location": "5th A Main, BTM 2nd Stage",
+      "ward": "Ward 18 - BTM Layout",
+      "submittedAt": "2026-11-20T05:25:52.023Z"
+    }
+  ],
+  "tickets": [
+    {
+      "id": "TKT-1008",
+      "complaintId": "CMP-8808",
+      "category": "Electricity",
+      "severity": "CRITICAL",
+      "reason": "Live exposed electrical wiring represents immediate life-safety and electrocution peril.",
+      "department": "Electrical Department",
+      "priorityScore": 99,
+      "status": "In Progress",
+      "aiConfidence": 0.97,
+      "manualReviewRequired": false,
+      "summary": "Sparking live wire hanging low outside school gate on 4th",
+      "createdAt": "2026-11-21T05:31:19.092Z",
+      "updatedAt": "2026-11-21T05:31:36.064Z",
+      "officerNotes": "Bescom emergency squad en route.",
+      "duplicateGroupId": "DUP-1795239079092"
+    },
+    {
+      "id": "TKT-1001",
+      "complaintId": "CMP-8801",
+      "category": "Electricity",
+      "severity": "CRITICAL",
+      "reason": "Exposed live electrical conductor poses immediate electrocution hazard adjacent to a school zone.",
+      "department": "Electrical Department",
+      "priorityScore": 98,
+      "status": "Pending",
+      "aiConfidence": 0.98,
+      "manualReviewRequired": false,
+      "summary": "Exposed live wire with sparking near primary school gate",
+      "createdAt": "2026-11-21T02:25:52.021Z",
+      "updatedAt": "2026-11-21T02:25:52.021Z",
+      "officerNotes": "",
+      "duplicateGroupId": null
+    },
+    {
+      "id": "TKT-1002",
+      "complaintId": "CMP-8802",
+      "category": "Roads",
+      "severity": "HIGH",
+      "reason": "Deep arterial pothole has already caused multiple vehicular skidding incidents.",
+      "department": "Road Maintenance Department",
+      "priorityScore": 78,
+      "status": "In Progress",
+      "aiConfidence": 0.95,
+      "manualReviewRequired": false,
+      "summary": "Severe road crater causing commuter accidents on 100ft road",
+      "createdAt": "2026-11-21T00:05:52.023Z",
+      "updatedAt": "2026-11-21T00:05:52.023Z",
+      "officerNotes": "",
+      "duplicateGroupId": null
+    },
+    {
+      "id": "TKT-1003",
+      "complaintId": "CMP-8803",
+      "category": "Waste",
+      "severity": "MEDIUM",
+      "reason": "Accumulated uncollected organic municipal waste near high-traffic produce market creating sanitation issue.",
+      "department": "Solid Waste Management Department",
+      "priorityScore": 54,
+      "status": "Pending",
+      "aiConfidence": 0.93,
+      "manualReviewRequired": false,
+      "summary": "[Translated: Garbage heap decaying near vegetable market for 3 days]",
+      "createdAt": "2026-11-20T22:25:52.023Z",
+      "updatedAt": "2026-11-20T22:25:52.023Z",
+      "officerNotes": "",
+      "duplicateGroupId": null
+    },
+    {
+      "id": "TKT-1004",
+      "complaintId": "CMP-8804",
+      "category": "Water",
+      "severity": "HIGH",
+      "reason": "Ruptured primary municipal supply pipeline causing massive potable water loss and street waterlogging.",
+      "department": "Water Supply Department",
+      "priorityScore": 74,
+      "status": "Pending",
+      "aiConfidence": 0.96,
+      "manualReviewRequired": false,
+      "summary": "Major drinking water pipeline breach flooding street",
+      "createdAt": "2026-11-20T20:25:52.023Z",
+      "updatedAt": "2026-11-20T20:25:52.023Z",
+      "officerNotes": "",
+      "duplicateGroupId": null
+    },
+    {
+      "id": "TKT-1005",
+      "complaintId": "CMP-8805",
+      "category": "Trees",
+      "severity": "HIGH",
+      "reason": "Fallen tree completely obstructs emergency vehicle access route to hospital.",
+      "department": "Parks and Horticulture Department",
+      "priorityScore": 79,
+      "status": "In Progress",
+      "aiConfidence": 0.97,
+      "manualReviewRequired": false,
+      "summary": "Large tree fallen across hospital approach road",
+      "createdAt": "2026-11-20T18:05:52.023Z",
+      "updatedAt": "2026-11-20T18:05:52.023Z",
+      "officerNotes": "",
+      "duplicateGroupId": null
+    },
+    {
+      "id": "TKT-1006",
+      "complaintId": "CMP-8806",
+      "category": "Drainage",
+      "severity": "HIGH",
+      "reason": "Blocked stormwater channel caused localized flash inundation into residential property basements.",
+      "department": "Stormwater Drainage Department",
+      "priorityScore": 76,
+      "status": "Pending",
+      "aiConfidence": 0.95,
+      "manualReviewRequired": false,
+      "summary": "Choked stormwater drain causing basement flooding in apartment layout",
+      "createdAt": "2026-11-20T15:45:52.023Z",
+      "updatedAt": "2026-11-20T15:45:52.023Z",
+      "officerNotes": "",
+      "duplicateGroupId": null
+    },
+    {
+      "id": "TKT-1007",
+      "complaintId": "CMP-8807",
+      "category": "Electricity",
+      "severity": "LOW",
+      "reason": "Flickering localized residential street fixture with minimal public safety impact.",
+      "department": "Electrical Department",
+      "priorityScore": 28,
+      "status": "Resolved",
+      "aiConfidence": 0.92,
+      "manualReviewRequired": false,
+      "summary": "Intermittent LED streetlight blinking on residential lane",
+      "createdAt": "2026-11-20T05:25:52.023Z",
+      "updatedAt": "2026-11-20T05:25:52.023Z",
+      "officerNotes": "Verified by lineman and fixture replaced.",
+      "duplicateGroupId": null
+    }
+  ],
+  "departments": [
+    {
+      "id": "dept_roads",
+      "name": "Road Maintenance Department",
+      "category": "Roads"
+    },
+    {
+      "id": "dept_waste",
+      "name": "Solid Waste Management Department",
+      "category": "Waste"
+    },
+    {
+      "id": "dept_water",
+      "name": "Water Supply Department",
+      "category": "Water"
+    },
+    {
+      "id": "dept_elec",
+      "name": "Electrical Department",
+      "category": "Electricity"
+    },
+    {
+      "id": "dept_trees",
+      "name": "Parks and Horticulture Department",
+      "category": "Trees"
+    },
+    {
+      "id": "dept_drain",
+      "name": "Stormwater Drainage Department",
+      "category": "Drainage"
+    }
+  ],
+  "duplicateGroups": [
+    {
+      "id": "DUP-1795239079092",
+      "primaryTicketId": "TKT-1001",
+      "relatedTicketIds": [
+        "TKT-1008"
+      ],
+      "similarityScore": 0.92,
+      "detectedReason": "High text similarity (32%) and identical ward (Ward 12 - Malleshwaram)",
+      "createdAt": "2026-11-21T05:31:19.092Z"
+    }
+  ],
+  "activityLogs": [
+    {
+      "id": "LOG-1795239096064",
+      "ticketId": "TKT-1008",
+      "action": "UPDATED",
+      "previousStatus": "Pending",
+      "newStatus": "In Progress",
+      "timestamp": "2026-11-21T05:31:36.064Z",
+      "performedBy": "Municipal Officer",
+      "details": "Status changed to In Progress (Notes: Bescom emergency squad en route.)"
+    },
+    {
+      "id": "LOG-1795239079093",
+      "ticketId": "TKT-1008",
+      "action": "SUBMITTED",
+      "previousStatus": null,
+      "newStatus": "Pending",
+      "timestamp": "2026-11-21T05:31:19.092Z",
+      "performedBy": "Citizen",
+      "details": "Citizen submitted complaint via portal. AI assigned Electricity with CRITICAL severity."
+    },
+    {
+      "id": "LOG-1795238752024-0",
+      "ticketId": "TKT-1001",
+      "action": "CREATED",
+      "previousStatus": null,
+      "newStatus": "Pending",
+      "timestamp": "2026-11-21T02:25:52.021Z",
+      "performedBy": "CivicLens AI System",
+      "details": "Automated triage and department dispatch completed."
+    },
+    {
+      "id": "LOG-1795238752024-1",
+      "ticketId": "TKT-1002",
+      "action": "CREATED",
+      "previousStatus": null,
+      "newStatus": "In Progress",
+      "timestamp": "2026-11-21T00:05:52.023Z",
+      "performedBy": "CivicLens AI System",
+      "details": "Automated triage and department dispatch completed."
+    },
+    {
+      "id": "LOG-1795238752024-2",
+      "ticketId": "TKT-1003",
+      "action": "CREATED",
+      "previousStatus": null,
+      "newStatus": "Pending",
+      "timestamp": "2026-11-20T22:25:52.023Z",
+      "performedBy": "CivicLens AI System",
+      "details": "Automated triage and department dispatch completed."
+    },
+    {
+      "id": "LOG-1795238752024-3",
+      "ticketId": "TKT-1004",
+      "action": "CREATED",
+      "previousStatus": null,
+      "newStatus": "Pending",
+      "timestamp": "2026-11-20T20:25:52.023Z",
+      "performedBy": "CivicLens AI System",
+      "details": "Automated triage and department dispatch completed."
+    },
+    {
+      "id": "LOG-1795238752024-4",
+      "ticketId": "TKT-1005",
+      "action": "CREATED",
+      "previousStatus": null,
+      "newStatus": "In Progress",
+      "timestamp": "2026-11-20T18:05:52.023Z",
+      "performedBy": "CivicLens AI System",
+      "details": "Automated triage and department dispatch completed."
+    },
+    {
+      "id": "LOG-1795238752024-5",
+      "ticketId": "TKT-1006",
+      "action": "CREATED",
+      "previousStatus": null,
+      "newStatus": "Pending",
+      "timestamp": "2026-11-20T15:45:52.023Z",
+      "performedBy": "CivicLens AI System",
+      "details": "Automated triage and department dispatch completed."
+    },
+    {
+      "id": "LOG-1795238752024-6",
+      "ticketId": "TKT-1007",
+      "action": "CREATED",
+      "previousStatus": null,
+      "newStatus": "Resolved",
+      "timestamp": "2026-11-20T05:25:52.023Z",
+      "performedBy": "CivicLens AI System",
+      "details": "Automated triage and department dispatch completed."
+    }
+  ]
+}
